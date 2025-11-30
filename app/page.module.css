@@ -1,8 +1,8 @@
 .page {
   min-height: 100vh;
-  background: radial-gradient(circle at 12% 18%, rgba(244, 209, 156, 0.35), transparent 36%),
-    radial-gradient(circle at 84% 12%, rgba(118, 154, 197, 0.3), transparent 32%),
-    linear-gradient(180deg, #1f2b38 0%, #111a25 65%, #0d1520 100%);
+  background: radial-gradient(circle at 12% 18%, rgba(255, 253, 208, 0.52), transparent 36%),
+    radial-gradient(circle at 84% 12%, rgba(158, 185, 212, 0.32), transparent 32%),
+    linear-gradient(180deg, #b9d9eb 0%, #9eb9d4 60%, #8eaac5 100%);
   overflow: hidden;
   position: relative;
   display: flex;
@@ -17,7 +17,7 @@
   inset: -40% auto auto -30%;
   width: 120vmin;
   height: 120vmin;
-  background: radial-gradient(circle at center, rgba(244, 209, 156, 0.38), transparent 50%);
+  background: radial-gradient(circle at center, rgba(255, 253, 208, 0.5), transparent 50%);
   filter: blur(64px);
   opacity: 0.85;
   pointer-events: none;
@@ -40,11 +40,11 @@
   width: min(42vw, 540px);
   height: min(42vw, 540px);
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(118, 154, 197, 0.36), transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(244, 209, 156, 0.38), transparent 55%),
-    linear-gradient(145deg, rgba(23, 32, 44, 0.85), rgba(42, 54, 72, 0.24));
-  filter: blur(22px) saturate(135%);
-  opacity: 0.8;
+  background: radial-gradient(circle at 30% 30%, rgba(158, 185, 212, 0.36), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(159, 129, 112, 0.38), transparent 55%),
+    linear-gradient(145deg, rgba(255, 253, 208, 0.4), rgba(158, 185, 212, 0.28));
+  filter: blur(20px) saturate(120%);
+  opacity: 0.7;
   z-index: 0;
 }
 
@@ -53,9 +53,9 @@
   left: 50%;
   top: 50%;
   border-radius: 9999px;
-  background: linear-gradient(135deg, rgba(118, 154, 197, 0.8), rgba(244, 209, 156, 0.8));
-  box-shadow: 0 0 24px rgba(118, 154, 197, 0.45);
-  opacity: 0.4;
+  background: linear-gradient(135deg, rgba(158, 185, 212, 0.8), rgba(255, 253, 208, 0.82));
+  box-shadow: 0 0 24px rgba(158, 185, 212, 0.35);
+  opacity: 0.35;
   z-index: 1;
 }
 
@@ -70,12 +70,12 @@
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: clamp(1.5rem, 3vw, 2.5rem);
   align-items: center;
-  background: rgba(25, 36, 50, 0.82);
+  background: rgba(255, 253, 208, 0.72);
   border-radius: 28px;
   padding: clamp(1.75rem, 3vw, 3rem);
-  border: 1px solid rgba(255, 250, 235, 0.12);
-  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 250, 235, 0.08);
-  backdrop-filter: blur(16px);
+  border: 1px solid rgba(158, 185, 212, 0.35);
+  box-shadow: 0 20px 80px rgba(142, 170, 197, 0.35), inset 0 1px 0 rgba(255, 253, 208, 0.55);
+  backdrop-filter: blur(18px);
 }
 
 .brand {
@@ -85,18 +85,49 @@
 }
 
 .logoWrap {
-  width: 72px;
-  height: 72px;
+  width: 92px;
+  height: 92px;
   padding: 0.75rem;
-  border-radius: 20px;
-  background: linear-gradient(145deg, rgba(118, 154, 197, 0.28), rgba(244, 209, 156, 0.25)),
-    rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 250, 235, 0.12);
-  box-shadow: 0 10px 30px rgba(118, 154, 197, 0.4);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(185, 217, 235, 0.68), rgba(158, 185, 212, 0.4)),
+    #fffdd0;
+  border: 1px solid rgba(158, 185, 212, 0.6);
+  box-shadow: 0 14px 30px rgba(158, 185, 212, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.logoInner {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 253, 208, 0.7), transparent 55%),
+    linear-gradient(135deg, rgba(158, 185, 212, 0.92), rgba(159, 129, 112, 0.4));
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.logoInitials {
+  font-weight: 800;
+  color: #1f2d3a;
+  font-size: 1.6rem;
+  letter-spacing: 0.1em;
+}
+
+.logoTag {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  color: #1f2d3a;
+  background: rgba(255, 253, 208, 0.9);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
 }
 
 .kicker {
-  color: #d5d8e6;
+  color: #55667e;
   font-size: 0.95rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -107,23 +138,23 @@
 .title {
   font-size: clamp(2.4rem, 4vw, 3rem);
   margin: 0;
-  color: #f8f1da;
+  color: #1f2d3a;
   font-family: var(--font-manrope), "Inter", system-ui;
 }
 
 .subtitle {
   margin: 0.5rem 0 0;
-  color: #d8deec;
+  color: #3d4c5f;
   line-height: 1.6;
   max-width: 520px;
 }
 
 .card {
-  background: linear-gradient(180deg, rgba(18, 26, 36, 0.94), rgba(15, 21, 30, 0.9));
+  background: linear-gradient(180deg, rgba(255, 253, 208, 0.94), rgba(185, 217, 235, 0.92));
   border-radius: 20px;
   padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid rgba(255, 250, 235, 0.12);
-  box-shadow: 0 10px 60px rgba(3, 7, 18, 0.5);
+  border: 1px solid rgba(158, 185, 212, 0.4);
+  box-shadow: 0 10px 50px rgba(143, 169, 192, 0.45);
   backdrop-filter: blur(12px);
 }
 
@@ -137,7 +168,7 @@
 
 .cardKicker {
   margin: 0;
-  color: #c7d4ea;
+  color: #55667e;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -146,6 +177,7 @@
 .cardTitle {
   margin: 0.2rem 0 0;
   font-size: 1.45rem;
+  color: #1f2d3a;
 }
 
 .statusPill {
@@ -154,11 +186,11 @@
   justify-content: center;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  background: linear-gradient(120deg, rgba(118, 154, 197, 0.35), rgba(244, 209, 156, 0.4));
-  border: 1px solid rgba(255, 250, 235, 0.18);
+  background: linear-gradient(120deg, rgba(158, 185, 212, 0.55), rgba(159, 129, 112, 0.4));
+  border: 1px solid rgba(158, 185, 212, 0.6);
   font-size: 0.85rem;
-  color: #0f1823;
-  box-shadow: 0 8px 25px rgba(118, 154, 197, 0.24);
+  color: #1f2d3a;
+  box-shadow: 0 8px 25px rgba(158, 185, 212, 0.32);
 }
 
 .form {
@@ -171,24 +203,24 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  color: #e8e9f3;
+  color: #1f2d3a;
   font-weight: 600;
 }
 
 .input {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 250, 235, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(158, 185, 212, 0.5);
   border-radius: 14px;
   padding: 0.9rem 1rem;
-  color: #fdf9ed;
+  color: #1f2d3a;
   font-size: 1rem;
   transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .input:focus {
   outline: none;
-  border-color: rgba(118, 154, 197, 0.65);
-  box-shadow: 0 10px 35px rgba(118, 154, 197, 0.28);
+  border-color: rgba(159, 129, 112, 0.8);
+  box-shadow: 0 10px 35px rgba(159, 129, 112, 0.25);
   transform: translateY(-1px);
 }
 
@@ -198,7 +230,7 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  color: #d4dceb;
+  color: #3d4c5f;
 }
 
 .checkboxLabel {
@@ -212,13 +244,13 @@
 .checkbox {
   width: 18px;
   height: 18px;
-  accent-color: #769ac5;
+  accent-color: #9f8170;
 }
 
 .linkButton {
   background: none;
   border: none;
-  color: #d4c7a3;
+  color: #9f8170;
   font-weight: 700;
   cursor: pointer;
   padding: 0;
@@ -226,8 +258,8 @@
 }
 
 .linkButton:hover {
-  color: #f1e2ba;
-  text-shadow: 0 0 18px rgba(244, 209, 156, 0.55);
+  color: #b25f3f;
+  text-shadow: 0 0 18px rgba(159, 129, 112, 0.35);
 }
 
 .submit {
@@ -235,9 +267,9 @@
   width: 100%;
   padding: 1rem 1.1rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 250, 235, 0.16);
-  background: linear-gradient(135deg, #769ac5, #f4d29a);
-  color: #0e1721;
+  border: 1px solid rgba(159, 129, 112, 0.48);
+  background: linear-gradient(135deg, #9eb9d4, #fffdd0 52%, #9f8170 100%);
+  color: #1f2d3a;
   font-weight: 800;
   font-size: 1rem;
   text-transform: uppercase;
@@ -257,8 +289,8 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(255, 248, 231, 0.95);
-  box-shadow: 0 0 18px rgba(255, 248, 231, 0.85);
+  background: rgba(159, 129, 112, 0.95);
+  box-shadow: 0 0 18px rgba(159, 129, 112, 0.7);
 }
 
 .footer {
@@ -268,7 +300,7 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  color: #e8ebf2;
+  color: #1f2d3a;
 }
 
 .footerTitle {
@@ -278,23 +310,23 @@
 
 .footerText {
   margin: 0.35rem 0 0;
-  color: #d3dce8;
+  color: #3d4c5f;
 }
 
 .secondary {
   padding: 0.85rem 1.05rem;
   border-radius: 14px;
-  border: 1px solid rgba(255, 250, 235, 0.12);
-  background: rgba(118, 154, 197, 0.16);
-  color: #f6f0dd;
+  border: 1px solid rgba(158, 185, 212, 0.6);
+  background: rgba(158, 185, 212, 0.18);
+  color: #1f2d3a;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease, border 0.2s ease;
 }
 
 .secondary:hover {
-  background: rgba(244, 209, 156, 0.2);
+  background: rgba(159, 129, 112, 0.18);
   transform: translateY(-1px);
-  border-color: rgba(255, 250, 235, 0.18);
+  border-color: rgba(159, 129, 112, 0.55);
 }
 
 @media (max-width: 768px) {
@@ -308,7 +340,7 @@
   }
 
   .logoWrap {
-    width: 64px;
-    height: 64px;
+    width: 82px;
+    height: 82px;
   }
 }

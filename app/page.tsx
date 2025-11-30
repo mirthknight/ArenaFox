@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import styles from "./page.module.css";
-import FoxGlyph from "./components/FoxGlyph";
 
 const floatingDots = Array.from({ length: 14 }).map((_, index) => ({
   id: index,
@@ -55,14 +54,17 @@ export default function Home() {
             className={styles.brand}
           >
             <div className={styles.logoWrap}>
-              <FoxGlyph />
+              <div className={styles.logoInner}>
+                <span className={styles.logoInitials}>AF</span>
+                <span className={styles.logoTag}>Portal</span>
+              </div>
             </div>
             <div>
-              <p className={styles.kicker}>Welcome back to</p>
-              <h1 className={styles.title}>Arena Fox</h1>
+              <p className={styles.kicker}>Welcome back</p>
+              <h1 className={styles.title}>Arena Fox Access</h1>
               <p className={styles.subtitle}>
-                A modern authentication portal with cinematic micro-interactions
-                and a serene dusk-inspired blue and cream palette.
+                A calmer, softer sign-in crafted with airy blues, warm clay, and
+                a hint of sunrise cream so every login feels intentional.
               </p>
             </div>
           </motion.div>
@@ -76,14 +78,14 @@ export default function Home() {
             <header className={styles.cardHeader}>
               <div>
                 <p className={styles.cardKicker}>Secure Login</p>
-                <h2 className={styles.cardTitle}>Enter the arena</h2>
+                <h2 className={styles.cardTitle}>Enter the calm arena</h2>
               </div>
               <motion.span
                 className={styles.statusPill}
                 animate={{ opacity: [0.8, 1, 0.8] }}
                 transition={{ duration: 2.5, repeat: Infinity }}
               >
-                Live
+                Stable
               </motion.span>
             </header>
 
@@ -118,17 +120,20 @@ export default function Home() {
                   Keep me signed in
                 </label>
                 <button type="button" className={styles.linkButton}>
-                  Forgot password?
+                  Trouble signing in?
                 </button>
               </div>
 
               <motion.button
                 type="submit"
                 className={styles.submit}
-                whileHover={{ scale: 1.02, boxShadow: "0 15px 60px rgba(79, 70, 229, 0.35)" }}
+                whileHover={{
+                  scale: 1.02,
+                  boxShadow: "0 15px 60px rgba(158, 185, 212, 0.35)",
+                }}
                 whileTap={{ scale: 0.98 }}
               >
-                Login
+                Continue
                 <motion.span
                   className={styles.spark}
                   animate={{ x: [0, 14, 0] }}
@@ -140,7 +145,9 @@ export default function Home() {
             <footer className={styles.footer}>
               <div>
                 <p className={styles.footerTitle}>New to Arena Fox?</p>
-                <p className={styles.footerText}>Experience the new way to guard your data.</p>
+                <p className={styles.footerText}>
+                  Build an account with layered security and graceful controls.
+                </p>
               </div>
               <button className={styles.secondary}>Create account</button>
             </footer>
