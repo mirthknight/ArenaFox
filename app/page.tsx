@@ -1,9 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <div className={styles.page}>
       <div className={styles.backdropGrid} aria-hidden />
@@ -47,6 +50,13 @@ export default function Home() {
           >
             Detect player names from screenshots, store profiles, and track event participation with ease.
           </motion.p>
+
+          <div className={styles.actions}>
+            <button className={styles.submit} onClick={() => router.push("/login")}>Go to login</button>
+            <button className={styles.secondary} onClick={() => router.push("/dashboard")}>
+              View dashboard
+            </button>
+          </div>
         </section>
 
         <motion.section
@@ -57,78 +67,38 @@ export default function Home() {
         >
           <header className={styles.cardHeader}>
             <div>
-              <p className={styles.cardKicker}>Alliance access</p>
-              <h2 className={styles.cardTitle}>Sign in to ArenaFox</h2>
+              <p className={styles.cardKicker}>Guest landing</p>
+              <h2 className={styles.cardTitle}>What you can expect</h2>
             </div>
             <motion.span
               className={styles.statusPill}
               animate={{ opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 2.4, repeat: Infinity }}
             >
-              Online
+              Preview
             </motion.span>
           </header>
 
-          <form className={styles.form}>
-            <label className={styles.label}>
-              Email
-              <input
-                className={styles.input}
-                type="email"
-                name="email"
-                placeholder="you@arenafox.com"
-                autoComplete="email"
-                required
-              />
-            </label>
-
-            <label className={styles.label}>
-              Password
-              <input
-                className={styles.input}
-                type="password"
-                name="password"
-                placeholder="••••••••"
-                autoComplete="current-password"
-                required
-              />
-            </label>
-
-            <div className={styles.actions}>
-              <label className={styles.checkboxLabel}>
-                <input type="checkbox" className={styles.checkbox} />
-                Keep me signed in
-              </label>
-              <button type="button" className={styles.linkButton}>
-                Trouble signing in?
-              </button>
+          <div className={styles.gridList}>
+            <div className={styles.gridItem}>
+              <p className={styles.cardKicker}>Player registry</p>
+              <p className={styles.gridCopy}>
+                Capture Kingshot names from screenshots and build a clean roster for officers and members.
+              </p>
             </div>
-
-            <motion.button
-              type="submit"
-              className={styles.submit}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0 12px 40px rgba(0, 173, 181, 0.25)",
-              }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Continue
-              <motion.span
-                className={styles.spark}
-                animate={{ x: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-              />
-            </motion.button>
-          </form>
-
-          <footer className={styles.footer}>
-            <div>
-              <p className={styles.footerTitle}>New to ArenaFox?</p>
-              <p className={styles.footerText}>Create an account to manage members with clarity.</p>
+            <div className={styles.gridItem}>
+              <p className={styles.cardKicker}>Event tracking</p>
+              <p className={styles.gridCopy}>
+                Plan scrimmages, raids, and calendar events, then log participation to keep history tidy.
+              </p>
             </div>
-            <button className={styles.secondary}>Create account</button>
-          </footer>
+            <div className={styles.gridItem}>
+              <p className={styles.cardKicker}>Alliance insights</p>
+              <p className={styles.gridCopy}>
+                Review performance highlights, attendance stats, and member momentum at a glance.
+              </p>
+            </div>
+          </div>
         </motion.section>
       </main>
     </div>
