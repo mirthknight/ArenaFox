@@ -192,6 +192,25 @@
   color: rgba(238, 238, 238, 0.7);
 }
 
+.gridList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.gridItem {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.gridCopy {
+  color: rgba(238, 238, 238, 0.78);
+  margin: 0.4rem 0 0;
+  line-height: 1.6;
+}
+
 .checkboxLabel {
   display: inline-flex;
   align-items: center;
@@ -290,6 +309,52 @@
   border-color: rgba(0, 173, 181, 0.35);
 }
 
+.tableWrapper {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tableHead,
+.tableRow {
+  display: grid;
+  grid-template-columns: 2.2fr 1.2fr 1fr 0.8fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem 0.9rem;
+  border-radius: var(--radius-md);
+}
+
+.tableHead {
+  color: rgba(238, 238, 238, 0.7);
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.03);
+  font-weight: 700;
+}
+
+.tableRow {
+  border: 1px solid var(--color-border);
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--color-cloud);
+}
+
+.tablePrimary {
+  font-weight: 700;
+}
+
+.badge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(0, 173, 181, 0.18);
+  border: 1px solid rgba(0, 173, 181, 0.4);
+  color: var(--color-cloud);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
 @media (max-width: 768px) {
   .page {
     padding: 1.2rem;
@@ -297,5 +362,10 @@
 
   .cardHeader {
     align-items: flex-start;
+  }
+
+  .tableHead,
+  .tableRow {
+    grid-template-columns: 1fr;
   }
 }
