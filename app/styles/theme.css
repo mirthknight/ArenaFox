@@ -1,0 +1,17 @@
+:root {
+  --color-ink: #222831;
+  --color-slate: #393e46;
+  --color-accent: #00adb5;
+  --color-cloud: #eeeeee;
+  --color-sand: #f5f7f8;
+  --color-panel: rgba(238, 238, 238, 0.08);
+  --color-border: rgba(238, 238, 238, 0.16);
+  --color-quiet: rgba(0, 0, 0, 0.25);
+
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.25);
+  --shadow-ring: 0 0 0 1px rgba(0, 173, 181, 0.16);
+}
