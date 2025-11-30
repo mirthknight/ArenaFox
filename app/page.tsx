@@ -27,7 +27,7 @@ export default function Home() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
           >
-            Track players manage events and organize your alliance easily
+            Track players, manage events, and organize your alliance
           </motion.p>
 
           <motion.h1
@@ -36,7 +36,7 @@ export default function Home() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
           >
-            ArenaFox Smart Kingshot Player Tracker and Event Manager
+            ArenaFox Kingshot Tracker & Event Manager
           </motion.h1>
 
           <motion.p
@@ -45,7 +45,7 @@ export default function Home() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.75, ease: "easeOut", delay: 0.14 }}
           >
-            ArenaFox is a simple and smart tool for Kingshot alliances. Detect player names from screenshots, store profiles, track events, and maintain participation history.
+            Detect player names from screenshots, store profiles, and track event participation with ease.
           </motion.p>
         </section>
 
