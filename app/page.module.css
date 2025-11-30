@@ -1,161 +1,121 @@
 .page {
   min-height: 100vh;
-  background: radial-gradient(circle at 12% 18%, rgba(255, 253, 208, 0.52), transparent 36%),
-    radial-gradient(circle at 84% 12%, rgba(158, 185, 212, 0.32), transparent 32%),
-    linear-gradient(180deg, #b9d9eb 0%, #9eb9d4 60%, #8eaac5 100%);
-  overflow: hidden;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 3vw, 3rem);
-  isolation: isolate;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  position: relative;
+  overflow: hidden;
 }
 
-.gradientGlow {
+.backdropGrid {
   position: absolute;
-  inset: -40% auto auto -30%;
-  width: 120vmin;
-  height: 120vmin;
-  background: radial-gradient(circle at center, rgba(255, 253, 208, 0.5), transparent 50%);
-  filter: blur(64px);
-  opacity: 0.85;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.noiseOverlay {
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-  mix-blend-mode: soft-light;
+  inset: 12% auto auto 8%;
+  width: 220px;
+  height: 220px;
+  background: linear-gradient(90deg, rgba(238, 238, 238, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(238, 238, 238, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
   opacity: 0.5;
-  pointer-events: none;
+  filter: blur(0.2px);
   z-index: 0;
 }
 
-.backgroundOrb {
+.backdropGlow {
   position: absolute;
-  inset: auto 5% 8% auto;
-  width: min(42vw, 540px);
-  height: min(42vw, 540px);
+  inset: auto -10% -18% auto;
+  width: 360px;
+  height: 360px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(158, 185, 212, 0.36), transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(159, 129, 112, 0.38), transparent 55%),
-    linear-gradient(145deg, rgba(255, 253, 208, 0.4), rgba(158, 185, 212, 0.28));
-  filter: blur(20px) saturate(120%);
-  opacity: 0.7;
+  background: radial-gradient(circle, rgba(0, 173, 181, 0.32), rgba(34, 40, 49, 0));
+  filter: blur(18px);
+  opacity: 0.6;
   z-index: 0;
-}
-
-.floatingDot {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, rgba(158, 185, 212, 0.8), rgba(255, 253, 208, 0.82));
-  box-shadow: 0 0 24px rgba(158, 185, 212, 0.35);
-  opacity: 0.35;
-  z-index: 1;
 }
 
 .shell {
   position: relative;
-  width: min(1100px, 100%);
-  z-index: 2;
-}
-
-.hero {
+  z-index: 1;
+  width: min(1120px, 100%);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  align-items: center;
-  background: rgba(255, 253, 208, 0.72);
-  border-radius: 28px;
-  padding: clamp(1.75rem, 3vw, 3rem);
-  border: 1px solid rgba(158, 185, 212, 0.35);
-  box-shadow: 0 20px 80px rgba(142, 170, 197, 0.35), inset 0 1px 0 rgba(255, 253, 208, 0.55);
-  backdrop-filter: blur(18px);
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: clamp(1.5rem, 2vw, 2rem);
+  align-items: stretch;
 }
 
-.brand {
-  display: flex;
+.brandCard {
+  background: linear-gradient(180deg, rgba(57, 62, 70, 0.8), rgba(34, 40, 49, 0.95));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(1.6rem, 3vw, 2.2rem);
+  display: grid;
   gap: 1rem;
-  align-items: center;
+  align-content: center;
 }
 
-.logoWrap {
-  width: 92px;
-  height: 92px;
-  padding: 0.75rem;
-  border-radius: 22px;
-  background: linear-gradient(145deg, rgba(185, 217, 235, 0.68), rgba(158, 185, 212, 0.4)),
-    #fffdd0;
-  border: 1px solid rgba(158, 185, 212, 0.6);
-  box-shadow: 0 14px 30px rgba(158, 185, 212, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.logoInner {
-  width: 100%;
-  height: 100%;
+.brandMark {
+  width: 74px;
+  height: 74px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(0, 173, 181, 0.32), rgba(238, 238, 238, 0.12));
+  border: 1px solid rgba(238, 238, 238, 0.2);
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 253, 208, 0.7), transparent 55%),
-    linear-gradient(135deg, rgba(158, 185, 212, 0.92), rgba(159, 129, 112, 0.4));
-  border-radius: 16px;
   position: relative;
   overflow: hidden;
 }
 
-.logoInitials {
+.brandInitials {
   font-weight: 800;
-  color: #1f2d3a;
-  font-size: 1.6rem;
   letter-spacing: 0.1em;
+  color: var(--color-cloud);
+  font-size: 1.1rem;
 }
 
-.logoTag {
+.brandAccent {
   position: absolute;
-  bottom: 10px;
-  right: 12px;
-  font-size: 0.65rem;
-  letter-spacing: 0.16em;
-  color: #1f2d3a;
-  background: rgba(255, 253, 208, 0.9);
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
+  inset: auto 12px 12px auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  filter: blur(1px);
+  opacity: 0.9;
 }
 
 .kicker {
-  color: #55667e;
-  font-size: 0.95rem;
-  letter-spacing: 0.12em;
+  margin: 0;
   text-transform: uppercase;
-  font-weight: 600;
-  margin: 0 0 0.35rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: rgba(238, 238, 238, 0.7);
+  font-size: 0.82rem;
 }
 
 .title {
-  font-size: clamp(2.4rem, 4vw, 3rem);
   margin: 0;
-  color: #1f2d3a;
-  font-family: var(--font-manrope), "Inter", system-ui;
+  color: var(--color-cloud);
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  line-height: 1.3;
+  font-family: var(--font-manrope), var(--font-inter), system-ui;
 }
 
 .subtitle {
-  margin: 0.5rem 0 0;
-  color: #3d4c5f;
+  margin: 0;
+  color: rgba(238, 238, 238, 0.76);
   line-height: 1.6;
-  max-width: 520px;
+  max-width: 640px;
 }
 
 .card {
-  background: linear-gradient(180deg, rgba(255, 253, 208, 0.94), rgba(185, 217, 235, 0.92));
-  border-radius: 20px;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid rgba(158, 185, 212, 0.4);
-  box-shadow: 0 10px 50px rgba(143, 169, 192, 0.45);
-  backdrop-filter: blur(12px);
+  background: linear-gradient(180deg, rgba(57, 62, 70, 0.9), rgba(34, 40, 49, 0.95));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(1.6rem, 3vw, 2.2rem);
+  display: grid;
+  gap: 1.25rem;
 }
 
 .cardHeader {
@@ -163,34 +123,33 @@
   justify-content: space-between;
   gap: 1rem;
   align-items: center;
-  margin-bottom: 1.25rem;
 }
 
 .cardKicker {
   margin: 0;
-  color: #55667e;
-  letter-spacing: 0.08em;
+  color: rgba(238, 238, 238, 0.72);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .cardTitle {
-  margin: 0.2rem 0 0;
-  font-size: 1.45rem;
-  color: #1f2d3a;
+  margin: 0.3rem 0 0;
+  font-size: 1.5rem;
+  color: var(--color-cloud);
 }
 
 .statusPill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.35rem 0.85rem;
+  padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  background: linear-gradient(120deg, rgba(158, 185, 212, 0.55), rgba(159, 129, 112, 0.4));
-  border: 1px solid rgba(158, 185, 212, 0.6);
-  font-size: 0.85rem;
-  color: #1f2d3a;
-  box-shadow: 0 8px 25px rgba(158, 185, 212, 0.32);
+  background: rgba(0, 173, 181, 0.16);
+  border: 1px solid rgba(0, 173, 181, 0.35);
+  color: var(--color-cloud);
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
 .form {
@@ -203,24 +162,24 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  color: #1f2d3a;
-  font-weight: 600;
+  color: var(--color-cloud);
+  font-weight: 700;
 }
 
 .input {
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(158, 185, 212, 0.5);
-  border-radius: 14px;
-  padding: 0.9rem 1rem;
-  color: #1f2d3a;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.95rem 1rem;
+  color: var(--color-cloud);
   font-size: 1rem;
   transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .input:focus {
   outline: none;
-  border-color: rgba(159, 129, 112, 0.8);
-  box-shadow: 0 10px 35px rgba(159, 129, 112, 0.25);
+  border-color: rgba(0, 173, 181, 0.7);
+  box-shadow: 0 10px 35px rgba(0, 173, 181, 0.15), var(--shadow-ring);
   transform: translateY(-1px);
 }
 
@@ -230,50 +189,52 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  color: #3d4c5f;
+  color: rgba(238, 238, 238, 0.7);
 }
 
 .checkboxLabel {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
 }
 
 .checkbox {
   width: 18px;
   height: 18px;
-  accent-color: #9f8170;
+  accent-color: var(--color-accent);
 }
 
 .linkButton {
   background: none;
   border: none;
-  color: #9f8170;
+  color: var(--color-cloud);
   font-weight: 700;
   cursor: pointer;
   padding: 0;
-  transition: color 0.2s ease, text-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .linkButton:hover {
-  color: #b25f3f;
-  text-shadow: 0 0 18px rgba(159, 129, 112, 0.35);
+  color: var(--color-accent);
+  transform: translateY(-1px);
 }
 
 .submit {
   margin-top: 0.25rem;
   width: 100%;
-  padding: 1rem 1.1rem;
-  border-radius: 16px;
-  border: 1px solid rgba(159, 129, 112, 0.48);
-  background: linear-gradient(135deg, #9eb9d4, #fffdd0 52%, #9f8170 100%);
-  color: #1f2d3a;
+  padding: 1rem 1.05rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(0, 173, 181, 0.5);
+  background: linear-gradient(90deg, rgba(0, 173, 181, 0.9), rgba(0, 173, 181, 0.7));
+  color: var(--color-ink);
   font-weight: 800;
   font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -286,21 +247,21 @@
 
 .spark {
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: rgba(159, 129, 112, 0.95);
-  box-shadow: 0 0 18px rgba(159, 129, 112, 0.7);
+  background: var(--color-cloud);
+  box-shadow: 0 0 16px rgba(238, 238, 238, 0.9);
 }
 
 .footer {
-  margin-top: 1.5rem;
+  margin-top: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  color: #1f2d3a;
+  color: var(--color-cloud);
 }
 
 .footerTitle {
@@ -310,37 +271,31 @@
 
 .footerText {
   margin: 0.35rem 0 0;
-  color: #3d4c5f;
+  color: rgba(238, 238, 238, 0.7);
 }
 
 .secondary {
   padding: 0.85rem 1.05rem;
-  border-radius: 14px;
-  border: 1px solid rgba(158, 185, 212, 0.6);
-  background: rgba(158, 185, 212, 0.18);
-  color: #1f2d3a;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: rgba(238, 238, 238, 0.05);
+  color: var(--color-cloud);
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease, border 0.2s ease;
 }
 
 .secondary:hover {
-  background: rgba(159, 129, 112, 0.18);
+  background: rgba(0, 173, 181, 0.12);
   transform: translateY(-1px);
-  border-color: rgba(159, 129, 112, 0.55);
+  border-color: rgba(0, 173, 181, 0.35);
 }
 
 @media (max-width: 768px) {
   .page {
-    padding: 1.25rem;
+    padding: 1.2rem;
   }
 
-  .brand {
-    flex-direction: column;
+  .cardHeader {
     align-items: flex-start;
-  }
-
-  .logoWrap {
-    width: 82px;
-    height: 82px;
   }
 }
