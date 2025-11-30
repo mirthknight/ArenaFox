@@ -1,135 +1,135 @@
 "use client";
 
-import { motion } from "framer-motion";
-import styles from "./page.module.css";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+const phrases = [
+  "Smart Kingshot player tracker",
+  "Event-ready alliance intelligence",
+  "Signal-perfect recon workflows",
+];
 
 export default function Home() {
+  const [displayText, setDisplayText] = useState("");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const fullText = phrases[phraseIndex];
+    const delta = isDeleting ? 40 : 80;
+
+    const timeout = setTimeout(() => {
+      setDisplayText((current) => {
+        const updated = isDeleting
+          ? fullText.substring(0, current.length - 1)
+          : fullText.substring(0, current.length + 1);
+
+        if (!isDeleting && updated === fullText) {
+          setTimeout(() => setIsDeleting(true), 1000);
+        }
+
+        if (isDeleting && updated === "") {
+          setIsDeleting(false);
+          setPhraseIndex((prev) => (prev + 1) % phrases.length);
+        }
+
+        return updated;
+      });
+    }, delta);
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, phraseIndex]);
+
   return (
-    <div className={styles.page}>
-      <div className={styles.backdropGrid} aria-hidden />
-      <div className={styles.backdropGlow} aria-hidden />
+    <div className="page">
+      <header className="navbar navbar-expand-md navbar-dark gradient-nav">
+        <div className="container-xl">
+          <Link className="navbar-brand" href="#">
+            <span className="navbar-brand-text fw-bold">ArenaFox</span>
+            <span className="badge bg-primary ms-3">Kingshot command</span>
+          </Link>
 
-      <main className={styles.shell}>
-        <section className={styles.brandCard}>
-          <motion.div
-            className={styles.brandMark}
-            initial={{ scale: 0.96, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <span className={styles.brandInitials}>AF</span>
-            <span className={styles.brandAccent} />
-          </motion.div>
+          <div className="navbar-nav flex-row order-md-last">
+            <Link className="btn btn-primary" href="#login">
+              Login
+            </Link>
+            <button
+              className="navbar-toggler ms-3"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbar-menu"
+              aria-controls="navbar-menu"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon" />
+            </button>
+          </div>
 
-          <motion.p
-            className={styles.kicker}
-            initial={{ y: 12, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
-          >
-            Track players, manage events, and organize your alliance
-          </motion.p>
+          <div className="collapse navbar-collapse" id="navbar-menu">
+            <div className="navbar-nav ms-auto">
+              <Link className="nav-link" href="#home">
+                Home
+              </Link>
+              <Link className="nav-link" href="#about">
+                About
+              </Link>
+              <Link className="nav-link" href="#login">
+                Access
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
 
-          <motion.h1
-            className={styles.title}
-            initial={{ y: 14, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
-          >
-            ArenaFox Kingshot Tracker & Event Manager
-          </motion.h1>
+      <main className="page-wrapper" id="home">
+        <section className="hero-shell">
+          <div className="container-xl">
+            <div className="row justify-content-center">
+              <div className="col-lg-10">
+                <div className="hero-card text-center">
+                  <div className="badge bg-dark text-uppercase letter-spaced mb-3">
+                    Arena Fox Alliance Portal
+                  </div>
+                  <h1 className="display-4 fw-bold mb-3">Command the signal, guide the alliance.</h1>
+                  <div className="type-line" aria-live="polite">
+                    <span className="typewriter">{displayText}</span>
+                    <span className="cursor" aria-hidden>
+                      |
+                    </span>
+                  </div>
+                  <p className="lead text-muted-soft mt-3 mb-4">
+                    Arena Fox keeps your Kingshot roster ready with crisp tracking, effortless event prep, and clear intel at a glance.
+                  </p>
 
-          <motion.p
-            className={styles.subtitle}
-            initial={{ y: 16, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.75, ease: "easeOut", delay: 0.14 }}
-          >
-            Detect player names from screenshots, store profiles, and track event participation with ease.
-          </motion.p>
+                  <div className="hero-visual mx-auto">
+                    <Image
+                      src="/arena-fox.svg"
+                      alt="Arena Fox crowned fox emblem"
+                      fill
+                      priority
+                      sizes="(min-width: 992px) 420px, 70vw"
+                      className="logo-img"
+                    />
+                  </div>
+
+                  <div className="btn-list justify-content-center mt-4" id="login">
+                    <Link className="btn btn-primary btn-lg" href="#">
+                      Login to dashboard
+                    </Link>
+                    <Link className="btn btn-outline-primary btn-lg" href="#about">
+                      Learn more
+                    </Link>
+                  </div>
+                </div>
+                <p className="text-center small text-muted mt-3" id="about">
+                  Built with the Tabler admin system and tuned to the teal-and-gold palette that defines Arena Fox.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
-
-        <motion.section
-          className={styles.card}
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.08 }}
-        >
-          <header className={styles.cardHeader}>
-            <div>
-              <p className={styles.cardKicker}>Alliance access</p>
-              <h2 className={styles.cardTitle}>Sign in to ArenaFox</h2>
-            </div>
-            <motion.span
-              className={styles.statusPill}
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 2.4, repeat: Infinity }}
-            >
-              Online
-            </motion.span>
-          </header>
-
-          <form className={styles.form}>
-            <label className={styles.label}>
-              Email
-              <input
-                className={styles.input}
-                type="email"
-                name="email"
-                placeholder="you@arenafox.com"
-                autoComplete="email"
-                required
-              />
-            </label>
-
-            <label className={styles.label}>
-              Password
-              <input
-                className={styles.input}
-                type="password"
-                name="password"
-                placeholder="••••••••"
-                autoComplete="current-password"
-                required
-              />
-            </label>
-
-            <div className={styles.actions}>
-              <label className={styles.checkboxLabel}>
-                <input type="checkbox" className={styles.checkbox} />
-                Keep me signed in
-              </label>
-              <button type="button" className={styles.linkButton}>
-                Trouble signing in?
-              </button>
-            </div>
-
-            <motion.button
-              type="submit"
-              className={styles.submit}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0 12px 40px rgba(0, 173, 181, 0.25)",
-              }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Continue
-              <motion.span
-                className={styles.spark}
-                animate={{ x: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-              />
-            </motion.button>
-          </form>
-
-          <footer className={styles.footer}>
-            <div>
-              <p className={styles.footerTitle}>New to ArenaFox?</p>
-              <p className={styles.footerText}>Create an account to manage members with clarity.</p>
-            </div>
-            <button className={styles.secondary}>Create account</button>
-          </footer>
-        </motion.section>
       </main>
     </div>
   );

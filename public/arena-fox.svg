@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Arena Fox Emblem</title>
+  <desc id="desc">Stylized teal fox head with a crown inside a circular badge.</desc>
+  <defs>
+    <linearGradient id="badgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d3b52" />
+      <stop offset="100%" stop-color="#0b2435" />
+    </linearGradient>
+    <linearGradient id="foxFace" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#2bd4d9" />
+      <stop offset="50%" stop-color="#0fb0b8" />
+      <stop offset="100%" stop-color="#0a7f8b" />
+    </linearGradient>
+    <linearGradient id="foxInner" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f6fbff" />
+      <stop offset="100%" stop-color="#c7e1ed" />
+    </linearGradient>
+    <linearGradient id="crown" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f6d35f" />
+      <stop offset="100%" stop-color="#c99a2d" />
+    </linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="240" fill="url(#badgeGradient)" stroke="#0fb0b8" stroke-width="10" />
+  <path d="M256 62c40 0 78 9 112 26 8 4 10 14 5 21l-8 11c-4 6-12 8-18 4-26-15-57-23-91-23s-65 8-91 23c-6 4-14 2-18-4l-8-11c-5-7-3-17 5-21 34-17 72-26 112-26z" fill="#123248" />
+  <path d="M153 167c-5 7-4 17 3 22 22 16 37 38 45 64l14 48c4 13 17 22 30 22h22c14 0 26-9 30-22l14-48c8-26 23-48 45-64 7-5 8-15 3-22l-10-13c-5-7-16-8-23-2-26 23-57 35-90 35s-64-12-90-35c-7-6-18-5-23 2l-10 13z" fill="url(#foxFace)" />
+  <path d="M208 270c-6-19-2-36 12-51l36-39 36 39c14 15 18 32 12 51l-8 25c-3 8-10 13-18 13h-44c-8 0-15-5-18-13l-8-25z" fill="url(#foxInner)" />
+  <path d="M240 310c0-9 7-16 16-16s16 7 16 16-7 16-16 16-16-7-16-16z" fill="#0b6c77" />
+  <path d="M196 252c-11-2-22 4-27 14l-10 19c-5 10-2 22 7 29l28 22c8 6 19 5 26-3l4-5c5-6 7-14 4-22l-14-40c-3-7-9-12-18-14z" fill="#0b8c95" />
+  <path d="M316 252c11-2 22 4 27 14l10 19c5 10 2 22-7 29l-28 22c-8 6-19 5-26-3l-4-5c-5-6-7-14-4-22l14-40c3-7 9-12 18-14z" fill="#0b8c95" />
+  <path d="M201 178c-3 0-5 2-5 5v12c0 3 2 5 5 5 22 0 45-7 67-21 2-2 4-5 4-8v-14c0-4-4-7-8-5-20 9-41 16-63 16z" fill="#0f99a3" />
+  <path d="M311 178c3 0 5 2 5 5v12c0 3-2 5-5 5-22 0-45-7-67-21-2-2-4-5-4-8v-14c0-4 4-7 8-5 20 9 41 16 63 16z" fill="#0f99a3" />
+  <path d="M211 132c-6 10-7 23-2 34l7 15c2 3 7 3 9-1l9-19c2-4 7-6 11-4l11 5c2 1 5 1 7 0l11-5c4-2 9 0 11 4l9 19c2 4 7 4 9 1l7-15c5-11 4-24-2-34-13-21-38-33-64-33s-51 12-64 33z" fill="#0fb0b8" />
+  <path d="M256 98c-10 0-18 8-18 18s8 18 18 18 18-8 18-18-8-18-18-18z" fill="#f6fbff" />
+  <path d="M198 106c-2-4-7-6-11-4l-18 8c-6 3-9 10-7 16l8 22c2 5 8 8 13 6l16-6c5-2 8-8 6-13l-7-23c-1-2-1-4 0-6z" fill="#0f99a3" />
+  <path d="M314 106c2-4 7-6 11-4l18 8c6 3 9 10 7 16l-8 22c-2 5-8 8-13 6l-16-6c-5-2-8-8-6-13l7-23c1-2 1-4 0-6z" fill="#0f99a3" />
+  <path d="M214 102l-10-34c-2-6 3-12 9-10l21 7c5 2 10 2 15 0l21-7c6-2 11 4 9 10l-10 34c-1 3-3 5-6 6l-18 7c-2 1-5 1-7 0l-18-7c-3-1-5-3-6-6z" fill="url(#crown)" />
+  <rect x="200" y="79" width="112" height="10" rx="5" fill="#f6e29d" opacity="0.7" />
+  <path d="M105 352c33 39 84 64 151 64s118-25 151-64" fill="none" stroke="#0fb0b8" stroke-width="14" stroke-linecap="round" />
+  <path d="M164 404h184c9 0 16 7 16 16v26c0 9-7 16-16 16H164c-9 0-16-7-16-16v-26c0-9 7-16 16-16z" fill="#102434" stroke="#0fb0b8" stroke-width="8" />
+  <text x="256" y="439" text-anchor="middle" fill="#f6fbff" font-family="'Manrope', 'Inter', sans-serif" font-size="44" font-weight="700" letter-spacing="1.5">ARENA FOX</text>
+</svg>
