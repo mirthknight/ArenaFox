@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, LogIn, ShieldCheck, Sparkles } from 'lucide-react';
 import {
@@ -68,31 +68,52 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(10);
   const [isReady, setIsReady] = useState(document.readyState === 'complete');
+  const startTimeRef = useRef<number>(performance.now());
 
   useEffect(() => {
     const handleReadyState = () => {
       if (document.readyState === 'complete') {
         setIsReady(true);
-        setProgress(100);
-        setLoading(false);
       }
     };
 
-    const timer = isReady
-      ? undefined
-      : setInterval(() => {
-          setProgress((value) => Math.min(value + Math.random() * 12, 95));
-        }, 260);
+    const timer = setInterval(() => {
+      setProgress((value) => {
+        const target = isReady ? 100 : 93;
+        if (value >= target) {
+          return value;
+        }
+
+        const increment = 6 + Math.random() * 8;
+        return Math.min(value + increment, target);
+      });
+    }, 260);
 
     handleReadyState();
     document.addEventListener('readystatechange', handleReadyState);
 
     return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
+      clearInterval(timer);
       document.removeEventListener('readystatechange', handleReadyState);
     };
+  }, [isReady]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return undefined;
+    }
+
+    setProgress(100);
+
+    const elapsed = performance.now() - startTimeRef.current;
+    const minimumDuration = 1200;
+    const delay = Math.max(450, minimumDuration - elapsed);
+
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, delay);
+
+    return () => clearTimeout(timeout);
   }, [isReady]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
