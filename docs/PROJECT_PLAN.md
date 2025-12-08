@@ -14,6 +14,7 @@ This plan tracks the requirements from the latest user brief and how the repo sa
 - Profile directory UI with badges, verification state, like counts, enable/disable toggles, and admin edit controls backed by mock data.
 - Admin-only guard and modal for editing member roles/status/verification and enablement.
 - Supabase schema defined in `database/schema.sql` plus execution guidance in `database/EXECUTION_GUIDE.md`.
+- Dashboard and admin tools now use a light, Scandinavian-inspired layout with simplified data tables, a mock-data notice bar, dynamic page titles, and modal-driven profile editing.
 
 ## Immediate Next Steps
 - Wire the profile directory and admin management views to Supabase tables (accounts, profiles, badges, likes, invites) once backend data is available.
