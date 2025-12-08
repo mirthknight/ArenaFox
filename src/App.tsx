@@ -1,7 +1,14 @@
 import React from 'react';
 import { Badge, Box, Container, Stack, Text, Title } from '@mantine/core';
 import { Sparkles } from 'lucide-react';
-import { SplashScreen, LoginForm, useSplashScreen } from '@/features/auth';
+import {
+  SplashScreen,
+  LoginForm,
+  DashboardPreview,
+  useSplashScreen,
+  useSupabaseAuth,
+  type LoginCredentials,
+} from '@/features/auth';
 import { ThemeIconFrame } from '@/shared/components/ui';
 
 /**
@@ -10,6 +17,11 @@ import { ThemeIconFrame } from '@/shared/components/ui';
  */
 function App() {
   const { loading, progress } = useSplashScreen();
+  const { signIn, isSubmitting, currentProfile } = useSupabaseAuth();
+
+  const handleLogin = async (credentials: LoginCredentials) => {
+    await signIn(credentials);
+  };
 
   return (
     <Box className="relative min-h-screen overflow-hidden">
@@ -35,7 +47,8 @@ function App() {
             </Text>
           </Stack>
 
-          <LoginForm />
+          <LoginForm onSubmit={handleLogin} isSubmitting={isSubmitting} />
+          <DashboardPreview profile={currentProfile} />
         </Stack>
       </Container>
     </Box>

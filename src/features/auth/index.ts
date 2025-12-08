@@ -4,7 +4,15 @@
  */
 
 export { LoginForm } from './components/LoginForm';
+export { DashboardPreview } from './components/DashboardPreview';
 export { SplashScreen } from './components/SplashScreen';
 export { useSplashScreen } from './hooks/useSplashScreen';
-export type { LoginCredentials, AuthState, User, SplashScreenProps } from './types/auth.types';
+export { useSupabaseAuth } from './hooks/useSupabaseAuth';
+export type {
+  LoginCredentials,
+  AuthState,
+  User,
+  UserProfile,
+  SplashScreenProps,
+} from './types/auth.types';
 

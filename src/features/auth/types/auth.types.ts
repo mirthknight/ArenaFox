@@ -20,7 +20,19 @@ export interface User {
   name?: string;
 }
 
+export interface UserProfile {
+  id: string;
+  email: string;
+  displayName: string;
+  avatarUrl?: string;
+  bio?: string;
+  isVerified: boolean;
+  verifiedAt: string | null;
+  isEnabled: boolean;
+  statusLabel: string | null;
+  role: 'member' | 'admin' | 'super_admin';
+}
+
 export interface SplashScreenProps {
   progress: number;
 }
-

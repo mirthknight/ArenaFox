@@ -39,7 +39,7 @@ export const useSplashScreen = () => {
       clearInterval(timer);
       document.removeEventListener('readystatechange', handleReadyState);
     };
-  }, [isReady]);
+  }, [isReady, startTimeRef]);
 
   useEffect(() => {
     if (!isReady) {

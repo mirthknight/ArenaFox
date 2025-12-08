@@ -16,14 +16,15 @@ import { LogIn, ShieldCheck } from 'lucide-react';
 import type { LoginCredentials } from '../types/auth.types';
 
 interface LoginFormProps {
-  onSubmit?: (credentials: LoginCredentials) => void;
+  onSubmit?: (credentials: LoginCredentials) => Promise<void> | void;
+  isSubmitting?: boolean;
 }
 
 /**
  * Login form component with email/password inputs and remember me option
  * Uses notification-based error messages with fox icon
  */
-export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
+export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) => {
   const [rememberMe, setRememberMe] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -120,7 +121,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
    * Handles form submission with validation
    * Prevents browser default validation and shows notification errors
    */
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -136,7 +137,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
     };
 
     if (onSubmit) {
-      onSubmit(credentials);
+      await onSubmit(credentials);
     } else {
       // Default behavior: show notification
       notifications.show({
@@ -217,8 +218,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
             radius="md"
             size="sm"
             color="teal"
+            loading={isSubmitting}
+            disabled={isSubmitting}
           >
-            Continue to Arena Fox
+            {isSubmitting ? 'Securing session…' : 'Continue to Arena Fox'}
           </Button>
           <Button
             fullWidth
