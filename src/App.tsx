@@ -66,22 +66,34 @@ function SplashScreen({ progress }: { progress: number }) {
 function App() {
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(18);
+  const [progress, setProgress] = useState(10);
+  const [isReady, setIsReady] = useState(document.readyState === 'complete');
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((value) => {
-        const next = Math.min(100, value + Math.random() * 18);
-        if (next >= 100) {
-          clearInterval(timer);
-          setTimeout(() => setLoading(false), 400);
-        }
-        return next;
-      });
-    }, 320);
+    const handleReadyState = () => {
+      if (document.readyState === 'complete') {
+        setIsReady(true);
+        setProgress(100);
+        setLoading(false);
+      }
+    };
 
-    return () => clearInterval(timer);
-  }, []);
+    const timer = isReady
+      ? undefined
+      : setInterval(() => {
+          setProgress((value) => Math.min(value + Math.random() * 12, 95));
+        }, 260);
+
+    handleReadyState();
+    document.addEventListener('readystatechange', handleReadyState);
+
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+      document.removeEventListener('readystatechange', handleReadyState);
+    };
+  }, [isReady]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -113,8 +125,7 @@ function App() {
               Welcome back to Arena Fox
             </Title>
             <Text size="sm" c="gray.1" ta="center" maw={560}>
-              Workspaces are tied to your user account. Sign in first, then create and refine each workspace once you are inside the
-              product.
+              Sign in to access your Arena Fox tools.
             </Text>
           </Stack>
 
@@ -129,9 +140,6 @@ function App() {
                     Log in to continue
                   </Title>
                 </div>
-                <Badge leftSection={<Sparkles size={14} />} radius="xl" color="teal" variant="light" className="bg-white/5 border border-white/10">
-                  Focused login
-                </Badge>
               </Group>
 
               <form className="space-y-4" onSubmit={handleSubmit}>
@@ -176,8 +184,19 @@ function App() {
                   </Anchor>
                 </Group>
 
-                <Button type="submit" fullWidth leftSection={<LogIn size={16} />} radius="md" size="md" color="teal">
+                <Button type="submit" fullWidth leftSection={<LogIn size={16} />} radius="md" size="sm" color="teal">
                   Continue to Arena Fox
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outline"
+                  radius="md"
+                  size="sm"
+                  color="gray"
+                  leftSection={<span className="text-lg">G</span>}
+                  disabled
+                >
+                  Continue with Gmail
                 </Button>
               </form>
 
@@ -188,8 +207,7 @@ function App() {
                   Workspace guidance
                 </Text>
                 <Text size="sm" c="gray.2">
-                  Your user profile owns every workspace you create after login. Set them up once you are inside and attach any
-                  future contexts without re-entering alliance data.
+                  Set up workspaces after you sign in—no extra steps required.
                 </Text>
               </Stack>
             </Stack>
