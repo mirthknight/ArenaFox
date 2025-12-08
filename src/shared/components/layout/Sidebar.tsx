@@ -37,12 +37,12 @@ export const Sidebar = () => {
                     className={`
                         w-full flex items-center p-3 mb-1 rounded-lg transition-all duration-200
                         ${isActive
-                            ? 'bg-primary-500/10 text-primary-400 border-r-2 border-primary-500'
-                            : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                            ? 'bg-indigo-50 text-indigo-700 border-r-2 border-indigo-500'
+                            : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
                         }
                     `}
                 >
-                    <item.icon size={20} className={isActive ? 'text-primary-400' : ''} />
+                    <item.icon size={20} className={isActive ? 'text-indigo-600' : ''} />
                     {!collapsed && (
                         <Text size="sm" ml="md" fw={500}>
                             {item.label}
@@ -56,7 +56,7 @@ export const Sidebar = () => {
     return (
         <nav
             className={`
-                h-[calc(100vh-64px)] overflow-y-auto bg-gradient-to-b from-[#0b1220]/90 via-[#0f172a]/85 to-[#0b1220]/90 backdrop-blur-xl border-r border-white/5 shadow-[10px_0_40px_rgba(0,0,0,0.35)]
+                h-[calc(100vh-64px)] overflow-y-auto bg-white border-r border-slate-200 shadow-[10px_0_25px_rgba(15,23,42,0.06)]
                 transition-all duration-300 flex flex-col sticky top-16
                 ${collapsed ? 'w-20' : 'w-64'}
             `}
@@ -72,7 +72,7 @@ export const Sidebar = () => {
 
                     {isAdmin && (
                         <>
-                            <div className="my-4 border-t border-white/5" />
+                            <div className="my-4 border-t border-slate-200" />
                             <Text size="xs" fw={700} c="dimmed" className="px-3 mb-2 uppercase tracking-wider">
                                 {!collapsed ? 'Admin' : '...'}
                             </Text>
@@ -84,10 +84,10 @@ export const Sidebar = () => {
                 </Stack>
             </div>
 
-            <div className="p-3 border-t border-white/5 bg-white/5/10">
+            <div className="p-3 border-t border-slate-200 bg-slate-50">
                 <UnstyledButton
                     onClick={() => setCollapsed(!collapsed)}
-                    className="w-full flex justify-center p-2 rounded-lg hover:bg-white/5 text-zinc-400 hover:text-white transition-colors"
+                    className="w-full flex justify-center p-2 rounded-lg hover:bg-indigo-50 text-slate-500 hover:text-slate-900 transition-colors"
                 >
                     {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
                 </UnstyledButton>

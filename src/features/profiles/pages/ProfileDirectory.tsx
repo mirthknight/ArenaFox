@@ -2,15 +2,14 @@ import { useMemo, useState } from 'react';
 import {
     ActionIcon,
     Avatar,
-    Badge,
-    Card,
     Group,
-    SimpleGrid,
     Stack,
     Text,
     Title,
     Tooltip,
     Switch,
+    Table,
+    Badge,
 } from '@mantine/core';
 import { Heart, Mail, ShieldCheck, ShieldOff } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
@@ -23,9 +22,7 @@ export const ProfileDirectory = () => {
     const canModerate = useMemo(() => user?.role === 'admin' || user?.role === 'super_admin', [user?.role]);
 
     const toggleLike = (id: string) => {
-        setProfiles((prev) =>
-            prev.map((profile) => (profile.id === id ? { ...profile, likes: profile.likes + 1 } : profile))
-        );
+        setProfiles((prev) => prev.map((profile) => (profile.id === id ? { ...profile, likes: profile.likes + 1 } : profile)));
     };
 
     const toggleEnabled = (id: string) => {
@@ -38,115 +35,108 @@ export const ProfileDirectory = () => {
     };
 
     return (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col gap-2">
-                <Title order={2} className="text-2xl md:text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-200 to-sky-300">
+                <Title order={2} className="text-2xl md:text-3xl font-black tracking-tight text-slate-900">
                     Member profiles
                 </Title>
                 <Text c="dimmed" size="sm">
-                    View verified badges, likes, and availability without leaving the dashboard.
+                    A simplified, readable list of the people in your arena.
                 </Text>
             </div>
 
-            <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
-                {profiles.map((profile) => (
-                    <Card
-                        key={profile.id}
-                        radius="lg"
-                        className="bg-white/5 border border-white/5 backdrop-blur-xl shadow-[0_15px_45px_rgba(0,0,0,0.35)]"
-                        padding="lg"
-                    >
-                        <Stack gap="sm">
-                            <Group justify="space-between" align="flex-start">
-                                <Group gap="md">
-                                    <Avatar radius="xl" size="md" color={profile.avatarColor ?? 'gray'}>
-                                        {profile.displayName.charAt(0).toUpperCase()}
-                                    </Avatar>
-                                    <div>
-                                        <Group gap={8} align="center">
-                                            <Text fw={700} className="text-white">
-                                                {profile.displayName}
-                                            </Text>
-                                            {profile.isVerified ? (
-                                                <Badge color="teal" leftSection={<ShieldCheck size={12} />} variant="light">
-                                                    Verified
-                                                </Badge>
-                                            ) : (
-                                                <Badge color="gray" leftSection={<ShieldOff size={12} />} variant="outline">
-                                                    Pending
-                                                </Badge>
-                                            )}
-                                        </Group>
-                                        <Text size="xs" c="dimmed">
-                                            {profile.email}
-                                        </Text>
-                                        {profile.statusLabel && (
-                                            <Text size="xs" c="gray.4" className="mt-1">
-                                                {profile.statusLabel}
-                                            </Text>
-                                        )}
-                                    </div>
-                                </Group>
-                                <Tooltip label={canModerate ? 'Toggle availability' : 'Only admins can change availability'}>
-                                    <Switch
-                                        size="md"
-                                        color="teal"
-                                        checked={profile.isEnabled}
-                                        onChange={() => toggleEnabled(profile.id)}
-                                        disabled={!canModerate}
-                                    />
-                                </Tooltip>
-                            </Group>
-
-                            <Text size="sm" c="gray.3" className="leading-relaxed">
-                                {profile.bio}
-                            </Text>
-
-                            <Group gap={8} className="flex flex-wrap">
-                                {profile.badges.map((badge) => (
-                                    <Badge key={badge} color="violet" variant="light" radius="sm">
-                                        {badge}
-                                    </Badge>
-                                ))}
-                            </Group>
-
-                            <Group justify="space-between" align="center">
-                                <Group gap="xs">
-                                    <Badge variant="dot" color={profile.role === 'super_admin' ? 'teal' : profile.role === 'admin' ? 'blue' : 'gray'} className="bg-white/5">
-                                        {profile.role.replace('_', ' ')}
-                                    </Badge>
-                                    <Badge variant="outline" color={profile.isEnabled ? 'teal' : 'red'}>
-                                        {profile.isEnabled ? 'Enabled' : 'Disabled'}
-                                    </Badge>
-                                </Group>
-
-                                <Group gap="xs">
-                                    <Tooltip label="Send message">
-                                        <ActionIcon variant="subtle" color="gray" radius="md">
-                                            <Mail size={16} />
-                                        </ActionIcon>
-                                    </Tooltip>
-                                    <Tooltip label="Give a like">
-                                        <ActionIcon
-                                            variant="gradient"
-                                            gradient={{ from: 'teal', to: 'cyan', deg: 120 }}
-                                            radius="md"
-                                            onClick={() => toggleLike(profile.id)}
-                                        >
-                                            <Group gap={6}>
-                                                <Heart size={16} />
-                                                <Text size="xs" fw={700}>
-                                                    {profile.likes}
-                                                </Text>
+            <div className="overflow-auto rounded-lg border border-slate-200 shadow-sm bg-white">
+                <Table highlightOnHover verticalSpacing="sm">
+                    <Table.Thead>
+                        <Table.Tr>
+                            <Table.Th>Member</Table.Th>
+                            <Table.Th>Email</Table.Th>
+                            <Table.Th>Role</Table.Th>
+                            <Table.Th>Status</Table.Th>
+                            <Table.Th>Likes</Table.Th>
+                            <Table.Th className="text-right">Actions</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                        {profiles.map((profile) => (
+                            <Table.Tr key={profile.id}>
+                                <Table.Td>
+                                    <Group gap="sm">
+                                        <Avatar radius="xl" size="sm" color={profile.avatarColor ?? 'gray'}>
+                                            {profile.displayName.charAt(0).toUpperCase()}
+                                        </Avatar>
+                                        <div>
+                                            <Group gap={8} align="center">
+                                                <Text fw={700}>{profile.displayName}</Text>
+                                                {profile.isVerified ? (
+                                                    <Tooltip label="Verified">
+                                                        <Badge color="indigo" variant="light" size="xs" leftSection={<ShieldCheck size={12} />}>
+                                                            Verified
+                                                        </Badge>
+                                                    </Tooltip>
+                                                ) : (
+                                                    <Badge color="gray" variant="outline" size="xs" leftSection={<ShieldOff size={12} />}>
+                                                        Pending
+                                                    </Badge>
+                                                )}
                                             </Group>
-                                        </ActionIcon>
+                                            <Text size="xs" c="dimmed">
+                                                {profile.bio}
+                                            </Text>
+                                        </div>
+                                    </Group>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Text size="sm">{profile.email}</Text>
+                                    {profile.statusLabel && (
+                                        <Text size="xs" c="dimmed">
+                                            {profile.statusLabel}
+                                        </Text>
+                                    )}
+                                </Table.Td>
+                                <Table.Td>
+                                    <Text size="sm" tt="capitalize">
+                                        {profile.role.replace('_', ' ')}
+                                    </Text>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Tooltip label={canModerate ? 'Toggle availability' : 'Only admins can change availability'}>
+                                        <Switch
+                                            size="sm"
+                                            color="indigo"
+                                            checked={profile.isEnabled}
+                                            onChange={() => toggleEnabled(profile.id)}
+                                            disabled={!canModerate}
+                                        />
                                     </Tooltip>
-                                </Group>
-                            </Group>
-                        </Stack>
-                    </Card>
-                ))}
-            </SimpleGrid>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Text fw={600}>{profile.likes}</Text>
+                                </Table.Td>
+                                <Table.Td className="text-right">
+                                    <Group gap="xs" justify="flex-end">
+                                        <Tooltip label="Send message">
+                                            <ActionIcon variant="subtle" color="gray" radius="md">
+                                                <Mail size={16} />
+                                            </ActionIcon>
+                                        </Tooltip>
+                                        <Tooltip label="Give a like">
+                                            <ActionIcon
+                                                variant="light"
+                                                color="indigo"
+                                                radius="md"
+                                                onClick={() => toggleLike(profile.id)}
+                                            >
+                                                <Heart size={16} />
+                                            </ActionIcon>
+                                        </Tooltip>
+                                    </Group>
+                                </Table.Td>
+                            </Table.Tr>
+                        ))}
+                    </Table.Tbody>
+                </Table>
+            </div>
         </div>
     );
 };
