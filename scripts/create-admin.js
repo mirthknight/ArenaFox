@@ -34,8 +34,8 @@ envContent.replace(/\r\n/g, '\n').split('\n').forEach(line => {
     }
 });
 
-const supabaseUrl = envVars.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = envVars.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = envVars.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = envVars.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
     console.error('Missing Supabase credentials in .env');
@@ -45,8 +45,13 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const ADMIN_EMAIL = 'mirthknight@gmail.com';
-const ADMIN_PASSWORD = 'Mirth$112233K!';
+const ADMIN_EMAIL = envVars.SUPER_ADMIN_EMAIL || process.env.SUPER_ADMIN_EMAIL;
+const ADMIN_PASSWORD = envVars.SUPER_ADMIN_PASSWORD || process.env.SUPER_ADMIN_PASSWORD;
+
+if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    console.error('Missing SUPER_ADMIN_EMAIL or SUPER_ADMIN_PASSWORD in your environment.');
+    process.exit(1);
+}
 
 async function createAdmin() {
     console.log(`Attempting to create admin user: ${ADMIN_EMAIL}...`);

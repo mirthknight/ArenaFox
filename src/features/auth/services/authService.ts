@@ -43,8 +43,6 @@ const mapProfile = (
 };
 
 export const fetchProfile = async (userId: string, email: string): Promise<UserProfile> => {
-  console.log('[authService] fetchProfile called for:', userId);
-
   try {
     // Create a timeout for the database query to prevent hanging on RLS issues
     const dbPromise = supabaseClient
@@ -65,7 +63,6 @@ export const fetchProfile = async (userId: string, email: string): Promise<UserP
       console.error('[authService] fetchProfile error:', error);
       // Fallthrough to fallback
     } else {
-      console.log('[authService] fetchProfile raw data:', data);
       return mapProfile(userId, email, data ?? undefined);
     }
   } catch (err) {
@@ -73,7 +70,6 @@ export const fetchProfile = async (userId: string, email: string): Promise<UserP
     // Fallthrough to fallback
   }
 
-  console.log('[authService] fetchProfile falling back to basic profile');
   // Fallback: Return a valid profile based on the authenticated credentials
   // This ensures the user can at least log in even if the database table is locked/empty
   return mapProfile(userId, email, null);

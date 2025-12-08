@@ -1,12 +1,12 @@
-import { SimpleGrid, Paper, Text, Group, Button } from '@mantine/core';
-import { ArrowUpRight, Users, Trophy, TrendingUp } from 'lucide-react';
+import { SimpleGrid, Paper, Text, Group, Badge } from '@mantine/core';
+import { ArrowUpRight, Users, Trophy, TrendingUp, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 
 export const DashboardHome = () => {
     const { user } = useAuth();
 
     const StatCard = ({ title, value, icon: Icon, color }: any) => (
-        <Paper className="p-6 bg-zinc-900/50 border border-white/5 backdrop-blur-sm" radius="md">
+        <Paper className="p-6 bg-gradient-to-br from-white/10 via-white/5 to-transparent border border-white/10 backdrop-blur-xl shadow-[0_15px_45px_rgba(0,0,0,0.35)]" radius="md">
             <Group justify="space-between" mb="xs">
                 <Text size="xs" c="dimmed" tt="uppercase" fw={700}>
                     {title}
@@ -30,9 +30,14 @@ export const DashboardHome = () => {
                 <Text className="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">
                     Welcome back, {user?.displayName}
                 </Text>
-                <Text c="dimmed" mt="xs">
-                    Here is what's happening in the Arena today.
-                </Text>
+                <Group mt="xs" gap="sm">
+                    <Text c="dimmed">
+                        Unified access across login and dashboard.
+                    </Text>
+                    <Badge color="teal" leftSection={<ShieldCheck size={12} />} variant="light">
+                        Verified session
+                    </Badge>
+                </Group>
             </div>
 
             <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">

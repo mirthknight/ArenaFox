@@ -14,19 +14,15 @@ export const LoginPage = () => {
 
     useEffect(() => {
         // If user is already logged in, redirect to dashboard
-        console.log('[LoginPage] useEffect - user:', user ? user.email : 'null');
         if (user) {
-            console.log('[LoginPage] Redirecting to dashboard...');
             navigate('/', { replace: true });
         }
     }, [user, navigate]);
 
     const handleLogin = async (credentials: LoginCredentials) => {
-        console.log('[LoginPage] handleLogin called with:', credentials.email);
         const profile = await signIn(credentials);
-        console.log('[LoginPage] signIn result:', profile);
         if (profile) {
-            console.log('[LoginPage] Login successful, waiting for AuthContext update or manual navigation');
+            return;
         }
     };
 

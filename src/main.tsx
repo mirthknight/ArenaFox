@@ -12,7 +12,15 @@ import { AuthProvider } from '@/features/auth/context/AuthContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <MantineProvider defaultColorScheme="dark" theme={{ fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+    <MantineProvider
+      defaultColorScheme="dark"
+      theme={{
+        fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
+        primaryColor: 'teal',
+        defaultRadius: 'md',
+        headings: { fontFamily: 'Inter, system-ui, -apple-system, sans-serif', fontWeight: '800' },
+      }}
+    >
       <Notifications position="top-right" limit={3} />
       <BrowserRouter>
         <AuthProvider>

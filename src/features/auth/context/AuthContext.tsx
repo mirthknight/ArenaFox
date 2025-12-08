@@ -17,10 +17,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     const fetchUser = async (userId: string, email: string) => {
-        console.log('[AuthContext] fetchUser called for:', email);
         try {
             const profile = await fetchProfile(userId, email);
-            console.log('[AuthContext] fetchProfile result:', profile);
             setUser(profile);
         } catch (error) {
             console.error('[AuthContext] Error fetching profile:', error);
@@ -29,7 +27,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const refreshProfile = async () => {
-        console.log('[AuthContext] refreshProfile called');
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session?.user?.email) {
             await fetchUser(session.user.id, session.user.email);
@@ -38,7 +35,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         let mounted = true;
-        console.log('[AuthContext] Provider mounted, starting initAuth');
 
         const initAuth = async () => {
             // Avoid double-setting loading in React StrictMode if already done
@@ -51,23 +47,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 );
 
                 const authPromise = (async () => {
-                    console.log('[AuthContext] Calling getSession...');
                     const { data: { session }, error } = await supabaseClient.auth.getSession();
-                    console.log('[AuthContext] getSession result:', { hasSession: !!session, error });
 
                     if (error) throw error;
 
                     if (session?.user?.email) {
-                        console.log('[AuthContext] Session found, fetching profile...');
                         return await fetchProfile(session.user.id, session.user.email);
                     }
-                    console.log('[AuthContext] No session found.');
                     return null;
                 })();
 
                 // Race between auth check and timeout
                 const profile = (await Promise.race([authPromise, timeoutDetails])) as UserProfile | null;
-                console.log('[AuthContext] Race finished. Profile:', profile);
 
                 if (mounted) {
                     if (profile) {
@@ -86,14 +77,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 }
             } finally {
                 if (mounted) {
-                    console.log('[AuthContext] initAuth finished, setting loading=false');
                     setLoading(false);
                 }
             }
         };
 
         const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
-            console.log(`[AuthContext] AuthStateChange: ${event}`, session?.user?.email);
             if (event === 'SIGNED_IN' && session?.user?.email) {
                 await fetchUser(session.user.id, session.user.email);
             } else if (event === 'SIGNED_OUT') {
@@ -104,15 +93,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         initAuth();
 
         return () => {
-            console.log('[AuthContext] Provider unmounting');
             mounted = false;
             subscription.unsubscribe();
         };
     }, []);
 
     const signOut = async () => {
-        await supabaseClient.auth.signOut();
-        setUser(null);
+        try {
+            setLoading(true);
+            await supabaseClient.auth.signOut();
+        } catch (error) {
+            console.error('[AuthContext] Sign out error:', error);
+        } finally {
+            setUser(null);
+            setLoading(false);
+        }
     };
 
     return (

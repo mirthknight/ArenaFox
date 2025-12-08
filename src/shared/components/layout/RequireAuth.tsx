@@ -7,11 +7,8 @@ export const RequireAuth = () => {
     const { user, loading } = useAuth();
     const navigate = useNavigate();
 
-    console.log('[RequireAuth] Render. Loading:', loading, 'User:', user ? user.email : 'null');
-
     useEffect(() => {
         if (!loading && !user) {
-            console.log('[RequireAuth] No user and not loading, redirecting to login');
             navigate('/login', { replace: true });
         }
     }, [loading, user, navigate]);

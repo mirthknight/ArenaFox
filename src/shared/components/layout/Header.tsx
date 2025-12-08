@@ -1,17 +1,24 @@
-import { ActionIcon, Avatar, Group, Menu, Text, Tooltip, UnstyledButton, rem } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
+import { ActionIcon, Avatar, Group, Menu, Text, Tooltip, UnstyledButton, rem, Badge } from '@mantine/core';
 import { LogOut, Settings, User as UserIcon, Bell } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { ThemeIconFrame } from '@/shared/components/ui';
 
 export const Header = () => {
     const { user, signOut } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSignOut = async () => {
+        await signOut();
+        navigate('/login', { replace: true });
+    };
 
     return (
-        <header className="h-16 border-b border-white/10 bg-black/40 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-50">
+        <header className="h-16 border-b border-white/10 bg-gradient-to-r from-[#0b1220]/90 via-[#0f172a]/80 to-[#0b1220]/90 backdrop-blur-xl px-6 flex items-center justify-between sticky top-0 z-50 shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
             <Group gap="xs" className="cursor-pointer">
                 {/* Simplified Logo */}
                 <div className="relative">
-                    <div className="absolute inset-0 bg-primary-500/20 blur-lg rounded-full" />
+                    <div className="absolute inset-0 bg-primary-500/25 blur-lg rounded-full" />
                     <ThemeIconFrame icon="🦊" className="relative z-10" />
                 </div>
                 <Text fz="xl" fw={900} className="tracking-tighter hidden sm:block">
@@ -20,6 +27,7 @@ export const Header = () => {
             </Group>
 
             <Group>
+                {user?.role === 'super_admin' && <Badge color="teal" variant="light">Super admin</Badge>}
                 <Tooltip label="Notifications">
                     <ActionIcon variant="subtle" color="gray" size="lg" radius="md">
                         <Bell size={20} />
@@ -64,7 +72,7 @@ export const Header = () => {
                         <Menu.Item
                             color="red"
                             leftSection={<LogOut size={14} />}
-                            onClick={signOut}
+                            onClick={handleSignOut}
                         >
                             Sign out
                         </Menu.Item>
