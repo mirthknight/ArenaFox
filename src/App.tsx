@@ -4,6 +4,7 @@ import { DashboardLayout } from '@/shared/components/layout/DashboardLayout';
 import { RequireAuth } from '@/shared/components/layout/RequireAuth';
 import { DashboardHome } from '@/features/dashboard/pages/DashboardHome';
 import { AdminDashboard } from '@/features/admin/pages/AdminDashboard';
+import { ProfileDirectory } from '@/features/profiles/pages/ProfileDirectory';
 import { NotFoundPage } from '@/shared/components/pages/NotFoundPage';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Route element={<RequireAuth />}>
         <Route element={<DashboardLayout />}>
           <Route path="/" element={<DashboardHome />} />
+          <Route path="/profiles" element={<ProfileDirectory />} />
           <Route path="/admin" element={<Navigate to="/admin/users" replace />} />
           <Route path="/admin/users" element={<AdminDashboard />} />
 

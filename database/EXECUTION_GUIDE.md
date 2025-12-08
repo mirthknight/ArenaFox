@@ -31,16 +31,17 @@ We have created a script to register the super admin user.
 
 ### Script Details
 -   **File**: `scripts/create-admin.js`
--   **User**: `mirthknight@gmail.com`
--   **Password**: `Mirth$112233K!`
+-   **Inputs** (from environment or `.env`):
+    - `SUPER_ADMIN_EMAIL`
+    - `SUPER_ADMIN_PASSWORD`
 
 ### Execution
-Run the following command in your terminal:
+1. Copy `.env.example` to `.env` and fill in your Supabase keys plus the admin email/password (do not commit this file).
+2. Run the following command in your terminal:
 
 ```bash
 node scripts/create-admin.js
 ```
 
 ### Post-Execution Note
-If your Supabase project sends email confirmations (default), you must click the link sent to `mirthknight@gmail.com` before you can log in.
-Alternatively, go to **Authentication > Users** in the Supabase Dashboard and manually verify the user.
+If your Supabase project sends email confirmations (default), you must verify the admin email before you can log in. Alternatively, go to **Authentication > Users** in the Supabase Dashboard and manually verify the user.

@@ -1,11 +1,8 @@
-import { ActionIcon, NavLink, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
+import { Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
 import {
     LayoutDashboard,
     Users,
-    Settings,
-    ShieldAlert,
-    CalendarDays,
-    Swords,
+    BadgeCheck,
     ChevronLeft,
     ChevronRight
 } from 'lucide-react';
@@ -16,13 +13,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const NAV_ITEMS = [
     { label: 'Dashboard', icon: LayoutDashboard, path: '/' },
-    { label: 'Battles', icon: Swords, path: '/battles' },
-    { label: 'Calendar', icon: CalendarDays, path: '/calendar' },
+    { label: 'Profiles', icon: BadgeCheck, path: '/profiles' },
 ];
 
 const ADMIN_ITEMS = [
     { label: 'User Management', icon: Users, path: '/admin/users' },
-    { label: 'System Settings', icon: Settings, path: '/admin/settings' },
 ];
 
 export const Sidebar = () => {
@@ -61,7 +56,7 @@ export const Sidebar = () => {
     return (
         <nav
             className={`
-                h-[calc(100vh-64px)] overflow-y-auto bg-black/20 backdrop-blur-sm border-r border-white/5
+                h-[calc(100vh-64px)] overflow-y-auto bg-gradient-to-b from-[#0b1220]/90 via-[#0f172a]/85 to-[#0b1220]/90 backdrop-blur-xl border-r border-white/5 shadow-[10px_0_40px_rgba(0,0,0,0.35)]
                 transition-all duration-300 flex flex-col sticky top-16
                 ${collapsed ? 'w-20' : 'w-64'}
             `}
@@ -89,10 +84,10 @@ export const Sidebar = () => {
                 </Stack>
             </div>
 
-            <div className="p-3 border-t border-white/5">
+            <div className="p-3 border-t border-white/5 bg-white/5/10">
                 <UnstyledButton
                     onClick={() => setCollapsed(!collapsed)}
-                    className="w-full flex justify-center p-2 rounded-lg hover:bg-white/5 text-zinc-500 hover:text-white transition-colors"
+                    className="w-full flex justify-center p-2 rounded-lg hover:bg-white/5 text-zinc-400 hover:text-white transition-colors"
                 >
                     {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
                 </UnstyledButton>
