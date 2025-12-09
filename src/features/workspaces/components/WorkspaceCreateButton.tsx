@@ -45,7 +45,7 @@ export const WorkspaceCreateButton = ({ triggerVariant = 'primary', compact = fa
     const [allianceName, setAllianceName] = useState('');
     const [allianceTag, setAllianceTag] = useState('');
     const [description, setDescription] = useState('');
-    const [serverId, setServerId] = useState<number | ''>('');
+    const [serverId, setServerId] = useState<string | number>('');
     const [defaultTimezone, setDefaultTimezone] = useState('UTC');
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
