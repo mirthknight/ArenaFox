@@ -23,10 +23,9 @@ const ADMIN_ITEMS = [
 interface SidebarProps {
     isMobileOpen: boolean;
     onClose: () => void;
-    width?: string;
 }
 
-export const Sidebar = ({ isMobileOpen, onClose, width = '17rem' }: SidebarProps) => {
+export const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
     const { user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
@@ -86,17 +85,16 @@ export const Sidebar = ({ isMobileOpen, onClose, width = '17rem' }: SidebarProps
     return (
         <nav
             className={`
-                fixed top-16 bottom-0 left-0 z-40 flex-shrink-0
+                fixed top-16 bottom-0 left-0 z-40 w-[17rem] flex-shrink-0
                 bg-[linear-gradient(160deg,rgba(34,40,49,0.98),rgba(57,62,70,0.92))]
                 border-r border-[var(--af-border)] shadow-[10px_0_35px_rgba(0,0,0,0.35)]
                 transition-all duration-300 flex flex-col text-[var(--af-ink)]
-                w-[var(--af-sidebar-width)]
-                ${collapsed ? 'md:w-20' : 'md:w-[var(--af-sidebar-width)]'}
+                ${collapsed ? 'md:w-20' : 'md:w-[17rem]'}
                 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+                md:sticky md:top-16 md:bottom-auto md:min-h-[calc(100vh-4rem)] md:max-h-[calc(100vh-4rem)]
                 overflow-y-auto
             `}
             aria-label="Sidebar navigation"
-            style={{ '--af-sidebar-width': width } as CSSProperties}
         >
             <div className="flex-1 py-5 px-3 space-y-4">
                 <Stack gap="xs">
