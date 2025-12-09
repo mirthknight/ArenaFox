@@ -6,7 +6,7 @@ import {
     ChevronLeft,
     ChevronRight
 } from 'lucide-react';
-import { useState, type ElementType } from 'react';
+import { useState, type CSSProperties, type ElementType } from 'react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WorkspaceCreateButton } from '@/features/workspaces';

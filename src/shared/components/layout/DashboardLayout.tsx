@@ -34,7 +34,7 @@ export const DashboardLayout = () => {
                     </main>
                 </div>
 
-                <Footer />
+                <Footer sidebarOffset={sidebarWidth} />
             </div>
         </div>
     );
