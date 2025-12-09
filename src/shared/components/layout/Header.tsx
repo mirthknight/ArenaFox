@@ -14,39 +14,39 @@ export const Header = () => {
     };
 
     return (
-        <header className="h-16 border-b border-slate-200 bg-white/90 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+        <header className="h-16 border-b border-[var(--af-border)] bg-[rgba(34,40,49,0.9)] backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-50 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
             <Group gap="xs" className="cursor-pointer">
                 {/* Simplified Logo */}
                 <ThemeIconFrame icon="🦊" />
-                <Text fz="xl" fw={900} className="tracking-tighter hidden sm:block text-slate-900">
-                    ARENA <span className="text-indigo-600">FOX</span>
+                <Text fz="xl" fw={900} className="tracking-tighter hidden sm:block text-[var(--af-ink)]">
+                    ARENA <span className="text-[var(--af-accent)]">FOX</span>
                 </Text>
             </Group>
 
             <Group>
                 <Tooltip label="Notifications">
-                    <ActionIcon variant="light" color="indigo" size="lg" radius="md">
+                    <ActionIcon variant="light" color="fox" size="lg" radius="md" className="bg-[rgba(0,173,181,0.12)] text-[var(--af-ink)]">
                         <Bell size={20} />
                     </ActionIcon>
                 </Tooltip>
 
                 <Menu shadow="md" width={200} position="bottom-end">
                     <Menu.Target>
-                        <UnstyledButton className="p-1 rounded-full hover:bg-indigo-50 transition-colors">
+                        <UnstyledButton className="p-1 rounded-full hover:bg-[rgba(0,173,181,0.12)] transition-colors">
                             <Group gap="xs">
                                 <Avatar
                                     src={user?.avatarUrl}
                                     radius="xl"
                                     size="md"
-                                    color="indigo"
+                                    color="fox"
                                 >
                                     {user?.displayName?.charAt(0).toUpperCase()}
                                 </Avatar>
                                 <div className="hidden md:block">
-                                    <Text size="sm" fw={600} className="leading-none text-slate-900">
+                                    <Text size="sm" fw={600} className="leading-none text-[var(--af-ink)]">
                                         {user?.displayName}
                                     </Text>
-                                    <Text size="xs" c="dimmed" className="mt-0.5">
+                                    <Text size="xs" c="gray.5" className="mt-0.5">
                                         {user?.role === 'super_admin' ? 'Super Admin' : user?.role === 'admin' ? 'Admin' : 'Member'}
                                     </Text>
                                 </div>

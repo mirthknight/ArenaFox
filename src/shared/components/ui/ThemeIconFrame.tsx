@@ -12,7 +12,9 @@ interface ThemeIconFrameProps {
  */
 export const ThemeIconFrame: React.FC<ThemeIconFrameProps> = ({ icon, className = '' }) => {
   return (
-    <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-teal-200 ring-1 ring-white/10 ${className}`}>
+    <div
+      className={`flex h-11 w-11 items-center justify-center rounded-xl bg-[rgba(0,173,181,0.12)] text-[var(--af-ink)] ring-1 ring-[rgba(238,238,238,0.15)] shadow-[0_10px_30px_rgba(0,0,0,0.35)] ${className}`}
+    >
       <motion.div
         animate={{ rotate: [0, -5, 5, 0] }}
         transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut' }}

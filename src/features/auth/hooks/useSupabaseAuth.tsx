@@ -29,7 +29,7 @@ export const useSupabaseAuth = (): UseSupabaseAuthReturn => {
       notifications.show({
         title: 'Secured with Supabase',
         message: `Welcome back${greetingSuffix}! Your session is protected by row-level policies.`,
-        color: 'teal',
+        color: 'fox',
         icon: <ShieldCheck size={16} />,
       });
 

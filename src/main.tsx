@@ -13,10 +13,14 @@ import { AuthProvider } from '@/features/auth/context/AuthContext';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <MantineProvider
-      defaultColorScheme="light"
+      defaultColorScheme="dark"
       theme={{
         fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-        primaryColor: 'indigo',
+        colors: {
+          fox: ['#e4f9fb', '#c8f1f4', '#a7e7ea', '#83dce0', '#5fd1d7', '#3cc6cd', '#1faeb5', '#00979f', '#007e86', '#00676f'],
+        },
+        primaryColor: 'fox',
+        primaryShade: 6,
         defaultRadius: 'md',
         headings: { fontFamily: 'Inter, system-ui, -apple-system, sans-serif', fontWeight: '800' },
       }}

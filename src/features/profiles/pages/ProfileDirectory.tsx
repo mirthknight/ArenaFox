@@ -37,15 +37,15 @@ export const ProfileDirectory = () => {
     return (
         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col gap-2">
-                <Title order={2} className="text-2xl md:text-3xl font-black tracking-tight text-slate-900">
+                <Title order={2} className="text-2xl md:text-3xl font-black tracking-tight text-[var(--af-ink)]">
                     Member profiles
                 </Title>
-                <Text c="dimmed" size="sm">
+                <Text c="gray.5" size="sm">
                     A simplified, readable list of the people in your arena.
                 </Text>
             </div>
 
-            <div className="overflow-auto rounded-lg border border-slate-200 shadow-sm bg-white">
+            <div className="overflow-auto rounded-lg border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] bg-[var(--af-surface)] text-[var(--af-ink)]">
                 <Table highlightOnHover verticalSpacing="sm">
                     <Table.Thead>
                         <Table.Tr>
@@ -66,14 +66,14 @@ export const ProfileDirectory = () => {
                                             {profile.displayName.charAt(0).toUpperCase()}
                                         </Avatar>
                                         <div>
-                                            <Group gap={8} align="center">
-                                                <Text fw={700}>{profile.displayName}</Text>
-                                                {profile.isVerified ? (
-                                                    <Tooltip label="Verified">
-                                                        <Badge color="indigo" variant="light" size="xs" leftSection={<ShieldCheck size={12} />}>
-                                                            Verified
-                                                        </Badge>
-                                                    </Tooltip>
+                                    <Group gap={8} align="center">
+                                        <Text fw={700}>{profile.displayName}</Text>
+                                        {profile.isVerified ? (
+                                            <Tooltip label="Verified">
+                                                <Badge color="fox" variant="light" size="xs" leftSection={<ShieldCheck size={12} />}>
+                                                    Verified
+                                                </Badge>
+                                            </Tooltip>
                                                 ) : (
                                                     <Badge color="gray" variant="outline" size="xs" leftSection={<ShieldOff size={12} />}>
                                                         Pending
@@ -89,10 +89,10 @@ export const ProfileDirectory = () => {
                                 <Table.Td>
                                     <Text size="sm">{profile.email}</Text>
                                     {profile.statusLabel && (
-                                        <Text size="xs" c="dimmed">
-                                            {profile.statusLabel}
-                                        </Text>
-                                    )}
+                                    <Text size="xs" c="gray.5">
+                                        {profile.statusLabel}
+                                    </Text>
+                                )}
                                 </Table.Td>
                                 <Table.Td>
                                     <Text size="sm" tt="capitalize">
@@ -103,7 +103,7 @@ export const ProfileDirectory = () => {
                                     <Tooltip label={canModerate ? 'Toggle availability' : 'Only admins can change availability'}>
                                         <Switch
                                             size="sm"
-                                            color="indigo"
+                                            color="fox"
                                             checked={profile.isEnabled}
                                             onChange={() => toggleEnabled(profile.id)}
                                             disabled={!canModerate}
@@ -123,7 +123,7 @@ export const ProfileDirectory = () => {
                                         <Tooltip label="Give a like">
                                             <ActionIcon
                                                 variant="light"
-                                                color="indigo"
+                                                color="fox"
                                                 radius="md"
                                                 onClick={() => toggleLike(profile.id)}
                                             >

@@ -105,7 +105,7 @@ export const AdminDashboard = () => {
         notifications.show({
             title: 'Invitation dispatched',
             message: `${newUser.email} added as ${inviteRole}`,
-            color: 'teal',
+            color: 'fox',
             icon: <MailPlus size={16} />,
         });
     };
@@ -144,7 +144,7 @@ export const AdminDashboard = () => {
         notifications.show({
             title: 'Profile updated',
             message: `${editDraft.displayName} has been refreshed`,
-            color: 'teal',
+            color: 'fox',
         });
 
         closeEdit();
@@ -219,11 +219,11 @@ export const AdminDashboard = () => {
                                 <Text size="sm" fw={600}>
                                     Verified badge
                                 </Text>
-                                <Badge color="indigo" variant="light">Super admin only</Badge>
+                                <Badge color="fox" variant="light">Super admin only</Badge>
                             </Group>
                             <Switch
                                 size="md"
-                                color="indigo"
+                                color="fox"
                                 checked={editDraft.isVerified}
                                 onChange={() => canVerify && updateDraftField('isVerified', !editDraft.isVerified)}
                                 disabled={!canVerify}
@@ -235,13 +235,13 @@ export const AdminDashboard = () => {
                                 <Text size="sm" fw={600}>
                                     Enabled
                                 </Text>
-                                <Badge color={editDraft.isEnabled ? 'teal' : 'red'} variant="light">
+                                <Badge color={editDraft.isEnabled ? 'fox' : 'red'} variant="light">
                                     {editDraft.isEnabled ? 'Active' : 'Disabled'}
                                 </Badge>
                             </Group>
                             <Switch
                                 size="md"
-                                color="teal"
+                                color="fox"
                                 checked={editDraft.isEnabled}
                                 onChange={() => canModerate && updateDraftField('isEnabled', !editDraft.isEnabled)}
                                 disabled={!canModerate}
@@ -260,13 +260,13 @@ export const AdminDashboard = () => {
                 )}
             </Modal>
 
-            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 text-[var(--af-ink)]">
                 <Group justify="space-between" align="flex-start">
                     <div>
-                        <Title order={2} className="text-2xl md:text-3xl font-black tracking-tight text-slate-900">
+                        <Title order={2} className="text-2xl md:text-3xl font-black tracking-tight text-[var(--af-ink)]">
                             User management
                         </Title>
-                        <Text c="dimmed" size="sm">
+                        <Text c="gray.5" size="sm">
                             Keep profiles tidy with the table below and edit everything through the modal.
                         </Text>
                     </div>
@@ -279,7 +279,7 @@ export const AdminDashboard = () => {
                     />
                 </Group>
 
-                <Paper className="p-4 border border-slate-200 shadow-sm" radius="md">
+                <Paper className="p-4 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)]" radius="md">
                     <Stack gap="sm">
                         <Group gap="sm" align="flex-end" wrap="wrap">
                             <TextInput
@@ -305,20 +305,20 @@ export const AdminDashboard = () => {
                                 Send invite
                             </Button>
                         </Group>
-                        <Text size="xs" c="dimmed">
+                        <Text size="xs" c="gray.5">
                             Invitations keep accounts gated while we finish wiring real data.
                         </Text>
                     </Stack>
                 </Paper>
 
-                <Paper className="p-4 border border-slate-200 shadow-sm" radius="md">
+                <Paper className="p-4 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)]" radius="md">
                     <Stack gap="md">
                         <Group justify="space-between" align="center">
                             <Text fw={700}>Directory</Text>
-                            <Badge color="indigo" variant="light">Edit opens modal</Badge>
+                            <Badge color="fox" variant="light">Edit opens modal</Badge>
                         </Group>
                         <Divider />
-                        <div className="overflow-auto rounded-lg border border-slate-200 bg-white">
+                        <div className="overflow-auto rounded-lg border border-[var(--af-border)] bg-[var(--af-surface)]">
                             <Table verticalSpacing="sm" highlightOnHover>
                                 <Table.Thead>
                                     <Table.Tr>
@@ -341,7 +341,7 @@ export const AdminDashboard = () => {
                                                         <Text size="sm" fw={600}>
                                                             {member.displayName}
                                                         </Text>
-                                                        <Text size="xs" c="dimmed">
+                                                        <Text size="xs" c="gray.5">
                                                             {member.email}
                                                         </Text>
                                                     </div>
@@ -353,14 +353,14 @@ export const AdminDashboard = () => {
                                                 </Text>
                                             </Table.Td>
                                             <Table.Td>
-                                                <Text size="sm" c="dimmed">
+                                                <Text size="sm" c="gray.5">
                                                     {member.badges.length ? member.badges.join(', ') : 'None'}
                                                 </Text>
                                             </Table.Td>
                                             <Table.Td>
                                                 <Tooltip label={canVerify ? 'Toggle verified badge' : 'Only super admin can verify'}>
                                                     <Switch
-                                                        color="indigo"
+                                                        color="fox"
                                                         size="sm"
                                                         checked={member.isVerified}
                                                         onChange={() => toggleVerified(member.id)}
@@ -371,7 +371,7 @@ export const AdminDashboard = () => {
                                             <Table.Td>
                                                 <Tooltip label={canModerate ? 'Enable or disable account' : 'Admin access required'}>
                                                     <Switch
-                                                        color="teal"
+                                                        color="fox"
                                                         size="sm"
                                                         checked={member.isEnabled}
                                                         onChange={() => toggleEnabled(member.id)}

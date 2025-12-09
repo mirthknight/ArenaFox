@@ -37,12 +37,12 @@ export const Sidebar = () => {
                     className={`
                         w-full flex items-center p-3 mb-1 rounded-lg transition-all duration-200
                         ${isActive
-                            ? 'bg-indigo-50 text-indigo-700 border-r-2 border-indigo-500'
-                            : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                            ? 'bg-[rgba(0,173,181,0.18)] text-[var(--af-ink)] border-r-2 border-[var(--af-accent)] shadow-[0_10px_30px_rgba(0,0,0,0.28)]'
+                            : 'text-[var(--af-ink-soft)] hover:bg-[rgba(0,173,181,0.08)] hover:text-[var(--af-ink)]'
                         }
                     `}
                 >
-                    <item.icon size={20} className={isActive ? 'text-indigo-600' : ''} />
+                    <item.icon size={20} className={isActive ? 'text-[var(--af-accent)]' : 'text-[var(--af-ink-muted)]'} />
                     {!collapsed && (
                         <Text size="sm" ml="md" fw={500}>
                             {item.label}
@@ -56,14 +56,14 @@ export const Sidebar = () => {
     return (
         <nav
             className={`
-                h-[calc(100vh-64px)] overflow-y-auto bg-white border-r border-slate-200 shadow-[10px_0_25px_rgba(15,23,42,0.06)]
-                transition-all duration-300 flex flex-col sticky top-16
+                h-[calc(100vh-64px)] overflow-y-auto bg-[var(--af-surface-alt)] border-r border-[var(--af-border)] shadow-[10px_0_35px_rgba(0,0,0,0.35)]
+                transition-all duration-300 flex flex-col sticky top-16 text-[var(--af-ink)]
                 ${collapsed ? 'w-20' : 'w-64'}
             `}
         >
             <div className="flex-1 py-6 px-3">
                 <Stack gap="xs">
-                    <Text size="xs" fw={700} c="dimmed" className="px-3 mb-2 uppercase tracking-wider">
+                    <Text size="xs" fw={700} c="gray.5" className="px-3 mb-2 uppercase tracking-wider">
                         {!collapsed ? 'Menu' : '...'}
                     </Text>
                     {NAV_ITEMS.map((item) => (
@@ -72,8 +72,8 @@ export const Sidebar = () => {
 
                     {isAdmin && (
                         <>
-                            <div className="my-4 border-t border-slate-200" />
-                            <Text size="xs" fw={700} c="dimmed" className="px-3 mb-2 uppercase tracking-wider">
+                            <div className="my-4 border-t border-[var(--af-border)]" />
+                            <Text size="xs" fw={700} c="gray.5" className="px-3 mb-2 uppercase tracking-wider">
                                 {!collapsed ? 'Admin' : '...'}
                             </Text>
                             {ADMIN_ITEMS.map((item) => (
@@ -84,10 +84,10 @@ export const Sidebar = () => {
                 </Stack>
             </div>
 
-            <div className="p-3 border-t border-slate-200 bg-slate-50">
+            <div className="p-3 border-t border-[var(--af-border)] bg-[rgba(57,62,70,0.5)]">
                 <UnstyledButton
                     onClick={() => setCollapsed(!collapsed)}
-                    className="w-full flex justify-center p-2 rounded-lg hover:bg-indigo-50 text-slate-500 hover:text-slate-900 transition-colors"
+                    className="w-full flex justify-center p-2 rounded-lg hover:bg-[rgba(0,173,181,0.12)] text-[var(--af-ink-soft)] hover:text-[var(--af-ink)] transition-colors"
                 >
                     {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
                 </UnstyledButton>
