@@ -1,5 +1,5 @@
 import type { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
-import { supabaseClient } from '@/shared/lib/supabaseClient';
+import { isSupabaseConfigured, supabaseClient } from '@/shared/lib/supabaseClient';
 import {
   type ActivityLogEntry,
   type ChangeRequest,
@@ -29,6 +29,161 @@ type HydratedWorkspaceState = {
   activityLog: ActivityLogEntry[];
   comments: Comment[];
 };
+
+const now = () => new Date().toISOString();
+
+const generateId = () =>
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : `id_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+
+const clone = <T>(value: T): T => {
+  const structuredCloneFn =
+    (globalThis as { structuredClone?: (value: unknown) => unknown }).structuredClone;
+  return typeof structuredCloneFn === 'function'
+    ? (structuredCloneFn(value) as T)
+    : (JSON.parse(JSON.stringify(value)) as T);
+};
+
+const mockWorkspaceId = 'workspace-mock-1';
+const mockUserId = 'mock-user-1';
+
+const createMockHydratedState = (): HydratedWorkspaceState => ({
+  workspaces: [
+    {
+      id: mockWorkspaceId,
+      name: 'Server 1161 – MEM',
+      slug: 'server-1161-mem',
+      serverId: 1161,
+      allianceName: 'MEM',
+      allianceTag: 'MEM',
+      description: 'Demo workspace for offline mode',
+      defaultTimezone: 'UTC',
+      isArchived: false,
+      createdByUserId: mockUserId,
+      createdAt: now(),
+      updatedAt: now(),
+    },
+  ],
+  workspaceMembers: [
+    {
+      id: generateId(),
+      workspaceId: mockWorkspaceId,
+      userId: mockUserId,
+      role: 'OWNER',
+      joinedAt: now(),
+    },
+  ],
+  workspaceInvites: [
+    {
+      id: generateId(),
+      workspaceId: mockWorkspaceId,
+      invitedEmail: 'alliance.new.member@example.com',
+      invitedByUserId: mockUserId,
+      roleOffered: 'EDITOR',
+      token: 'mock-token-1',
+      status: 'PENDING',
+      expiresAt: now(),
+      createdAt: now(),
+    },
+  ],
+  players: [
+    {
+      id: generateId(),
+      workspaceId: mockWorkspaceId,
+      inGameName: 'ShieldWall',
+      allianceRole: 'R4',
+      cityLevel: 35,
+      power: 120_000_000,
+      isActive: true,
+      joinedDate: now(),
+      notes: 'Offline demo captain',
+      createdAt: now(),
+      updatedAt: now(),
+    },
+    {
+      id: generateId(),
+      workspaceId: mockWorkspaceId,
+      inGameName: 'FrostArcher',
+      allianceRole: 'R3',
+      cityLevel: 33,
+      power: 95_000_000,
+      isActive: true,
+      joinedDate: now(),
+      notes: 'Reliable rally joiner',
+      createdAt: now(),
+      updatedAt: now(),
+    },
+  ],
+  eventTypes: [...DEFAULT_EVENT_TYPES],
+  eventSessions: [
+    {
+      id: generateId(),
+      workspaceId: mockWorkspaceId,
+      eventTypeCode: 'BEAR_TRAP',
+      name: 'Bear Trap Warmup',
+      startDateTime: now(),
+      endDateTime: now(),
+      status: 'COMPLETED',
+      metadata: { trapLevel: 5, totalDamage: 1_250_000_000, rewardTier: 'Gold' },
+      createdByUserId: mockUserId,
+      createdAt: now(),
+      updatedAt: now(),
+    },
+  ],
+  eventParticipations: [],
+  changeRequests: [],
+  activityLog: [
+    {
+      id: generateId(),
+      workspaceId: mockWorkspaceId,
+      actorUserId: mockUserId,
+      actionType: 'CREATE_WORKSPACE',
+      targetType: 'WORKSPACE',
+      targetId: mockWorkspaceId,
+      diff: { mode: 'offline' },
+      createdAt: now(),
+    },
+  ],
+  comments: [
+    {
+      id: generateId(),
+      workspaceId: mockWorkspaceId,
+      targetType: 'WORKSPACE',
+      targetId: mockWorkspaceId,
+      authorUserId: mockUserId,
+      body: 'Offline data is active because Supabase is not configured.',
+      createdAt: now(),
+      updatedAt: now(),
+      isEdited: false,
+    },
+  ],
+});
+
+let mockState: HydratedWorkspaceState | null = null;
+
+const ensureMockState = () => {
+  if (!mockState) {
+    mockState = createMockHydratedState();
+  }
+  return mockState;
+};
+
+const upsertMockMembershipForUser = (userId: string) => {
+  const state = ensureMockState();
+  const existing = state.workspaceMembers.find((member) => member.userId === userId);
+  if (!existing) {
+    state.workspaceMembers.push({
+      id: generateId(),
+      workspaceId: state.workspaces[0]?.id ?? mockWorkspaceId,
+      userId,
+      role: 'VIEWER',
+      joinedAt: now(),
+    });
+  }
+};
+
+const usingMockRepository = !isSupabaseConfigured;
 
 interface WorkspaceRow {
   id: string;
@@ -317,6 +472,12 @@ const handleList = async <TRow, TValue>(
 };
 
 const upsertDefaultEventTypes = async (): Promise<EventType[]> => {
+  if (usingMockRepository) {
+    const state = ensureMockState();
+    state.eventTypes = [...DEFAULT_EVENT_TYPES];
+    return clone(state.eventTypes);
+  }
+
   const { data, error } = await supabaseClient
     .from<EventTypeRow>('event_types')
     .upsert(
@@ -342,6 +503,15 @@ const upsertDefaultEventTypes = async (): Promise<EventType[]> => {
 };
 
 const fetchScopedWorkspaces = async (userId: string) => {
+  if (usingMockRepository) {
+    upsertMockMembershipForUser(userId);
+    const state = ensureMockState();
+    return {
+      workspaces: clone(state.workspaces),
+      workspaceMembers: clone(state.workspaceMembers),
+    };
+  }
+
   const memberRows = await handleList(
     supabaseClient.from<WorkspaceMemberRow>('workspace_members').select('*').eq('user_id', userId),
     toWorkspaceMember
@@ -373,6 +543,32 @@ const fetchScopedWorkspaces = async (userId: string) => {
 };
 
 const fetchCollectionsForWorkspaces = async (workspaceIds: string[]): Promise<HydratedWorkspaceState> => {
+  if (usingMockRepository) {
+    const state = ensureMockState();
+    const targetIds = workspaceIds.length ? workspaceIds : state.workspaces.map((workspace) => workspace.id);
+    const filterByWorkspace = <T extends { workspaceId: string }>(collection: T[]) =>
+      collection.filter((item) => targetIds.includes(item.workspaceId));
+
+    const eventSessions = filterByWorkspace(state.eventSessions);
+    const sessionIds = eventSessions.map((session) => session.id);
+    const eventParticipations = state.eventParticipations.filter((participation) =>
+      sessionIds.includes(participation.eventSessionId)
+    );
+
+    return {
+      workspaces: [],
+      workspaceMembers: [],
+      workspaceInvites: filterByWorkspace(state.workspaceInvites),
+      players: filterByWorkspace(state.players),
+      eventTypes: [...state.eventTypes],
+      eventSessions,
+      eventParticipations,
+      changeRequests: filterByWorkspace(state.changeRequests),
+      activityLog: filterByWorkspace(state.activityLog),
+      comments: filterByWorkspace(state.comments),
+    };
+  }
+
   if (!workspaceIds.length) {
     return {
       workspaces: [],
@@ -450,6 +646,11 @@ const fetchCollectionsForWorkspaces = async (workspaceIds: string[]): Promise<Hy
 
 export const workspaceRepository = {
   async hydrateForUser(userId: string): Promise<HydratedWorkspaceState> {
+    if (usingMockRepository) {
+      upsertMockMembershipForUser(userId);
+      return clone(ensureMockState());
+    }
+
     await upsertDefaultEventTypes();
     const { workspaces, members, workspaceIds } = await fetchScopedWorkspaces(userId);
     const collectionState = await fetchCollectionsForWorkspaces(workspaceIds);
@@ -462,6 +663,12 @@ export const workspaceRepository = {
   },
 
   async insertWorkspace(workspace: Workspace): Promise<Workspace> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.workspaces.push(workspace);
+      return clone(workspace);
+    }
+
     const row = fromWorkspace(workspace);
     return handleSingle(
       supabaseClient.from<WorkspaceRow>('workspaces').insert(row).select('*').single(),
@@ -470,6 +677,15 @@ export const workspaceRepository = {
   },
 
   async updateWorkspace(workspace: Workspace): Promise<Workspace> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      const updated = clone(workspace);
+      state.workspaces = state.workspaces.map((existing) =>
+        existing.id === workspace.id ? updated : existing
+      );
+      return updated;
+    }
+
     const row = fromWorkspace(workspace);
     return handleSingle(
       supabaseClient.from<WorkspaceRow>('workspaces').update(row).eq('id', workspace.id).select('*').single(),
@@ -478,6 +694,12 @@ export const workspaceRepository = {
   },
 
   async insertWorkspaceMember(member: WorkspaceMember): Promise<WorkspaceMember> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.workspaceMembers.push(member);
+      return clone(member);
+    }
+
     return handleSingle(
       supabaseClient
         .from<WorkspaceMemberRow>('workspace_members')
@@ -495,11 +717,23 @@ export const workspaceRepository = {
   },
 
   async removeWorkspaceMember(memberId: string) {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.workspaceMembers = state.workspaceMembers.filter((member) => member.id !== memberId);
+      return;
+    }
+
     const { error } = await supabaseClient.from('workspace_members').delete().eq('id', memberId);
     if (error) throw error;
   },
 
   async insertWorkspaceInvite(invite: WorkspaceInvite): Promise<WorkspaceInvite> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.workspaceInvites.push(invite);
+      return clone(invite);
+    }
+
     return handleSingle(
       supabaseClient
         .from<WorkspaceInviteRow>('workspace_invites')
@@ -521,6 +755,14 @@ export const workspaceRepository = {
   },
 
   async updateWorkspaceInvite(inviteId: string, patch: Partial<WorkspaceInvite>): Promise<WorkspaceInvite> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.workspaceInvites = state.workspaceInvites.map((invite) =>
+        invite.id === inviteId ? { ...invite, ...patch } : invite
+      );
+      return clone(state.workspaceInvites.find((invite) => invite.id === inviteId)!);
+    }
+
     return handleSingle(
       supabaseClient
         .from<WorkspaceInviteRow>('workspace_invites')
@@ -536,6 +778,12 @@ export const workspaceRepository = {
   },
 
   async insertPlayer(player: Player): Promise<Player> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.players.push(player);
+      return clone(player);
+    }
+
     return handleSingle(
       supabaseClient
         .from<PlayerRow>('players')
@@ -560,6 +808,12 @@ export const workspaceRepository = {
   },
 
   async updatePlayer(player: Player): Promise<Player> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.players = state.players.map((existing) => (existing.id === player.id ? player : existing));
+      return clone(player);
+    }
+
     return handleSingle(
       supabaseClient
         .from<PlayerRow>('players')
@@ -582,6 +836,12 @@ export const workspaceRepository = {
   },
 
   async insertEventType(eventType: EventType): Promise<EventType> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.eventTypes.push(eventType);
+      return clone(eventType);
+    }
+
     return handleSingle(
       supabaseClient
         .from<EventTypeRow>('event_types')
@@ -602,6 +862,12 @@ export const workspaceRepository = {
   },
 
   async insertEventSession(session: EventSession): Promise<EventSession> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.eventSessions.push(session);
+      return clone(session);
+    }
+
     return handleSingle(
       supabaseClient
         .from<EventSessionRow>('event_sessions')
@@ -625,6 +891,14 @@ export const workspaceRepository = {
   },
 
   async updateEventSession(session: EventSession): Promise<EventSession> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.eventSessions = state.eventSessions.map((existing) =>
+        existing.id === session.id ? session : existing
+      );
+      return clone(session);
+    }
+
     return handleSingle(
       supabaseClient
         .from<EventSessionRow>('event_sessions')
@@ -644,11 +918,26 @@ export const workspaceRepository = {
   },
 
   async deleteEventSession(sessionId: string) {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.eventSessions = state.eventSessions.filter((session) => session.id !== sessionId);
+      state.eventParticipations = state.eventParticipations.filter(
+        (participation) => participation.eventSessionId !== sessionId
+      );
+      return;
+    }
+
     const { error } = await supabaseClient.from('event_sessions').delete().eq('id', sessionId);
     if (error) throw error;
   },
 
   async insertEventParticipation(participation: EventParticipation): Promise<EventParticipation> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.eventParticipations.push(participation);
+      return clone(participation);
+    }
+
     return handleSingle(
       supabaseClient
         .from<EventParticipationRow>('event_participations')
@@ -669,6 +958,14 @@ export const workspaceRepository = {
   },
 
   async updateEventParticipation(participation: EventParticipation): Promise<EventParticipation> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.eventParticipations = state.eventParticipations.map((existing) =>
+        existing.id === participation.id ? participation : existing
+      );
+      return clone(participation);
+    }
+
     return handleSingle(
       supabaseClient
         .from<EventParticipationRow>('event_participations')
@@ -686,6 +983,12 @@ export const workspaceRepository = {
   },
 
   async insertChangeRequest(changeRequest: ChangeRequest): Promise<ChangeRequest> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.changeRequests.push(changeRequest);
+      return clone(changeRequest);
+    }
+
     return handleSingle(
       supabaseClient
         .from<ChangeRequestRow>('change_requests')
@@ -709,6 +1012,14 @@ export const workspaceRepository = {
   },
 
   async updateChangeRequest(changeRequest: ChangeRequest): Promise<ChangeRequest> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.changeRequests = state.changeRequests.map((existing) =>
+        existing.id === changeRequest.id ? changeRequest : existing
+      );
+      return clone(changeRequest);
+    }
+
     return handleSingle(
       supabaseClient
         .from<ChangeRequestRow>('change_requests')
@@ -727,6 +1038,12 @@ export const workspaceRepository = {
   },
 
   async insertActivityLog(entry: ActivityLogEntry): Promise<ActivityLogEntry> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.activityLog.push(entry);
+      return clone(entry);
+    }
+
     return handleSingle(
       supabaseClient
         .from<ActivityLogRow>('activity_logs')
@@ -747,6 +1064,12 @@ export const workspaceRepository = {
   },
 
   async insertComment(comment: Comment): Promise<Comment> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.comments.push(comment);
+      return clone(comment);
+    }
+
     return handleSingle(
       supabaseClient
         .from<CommentRow>('comments')
@@ -768,6 +1091,12 @@ export const workspaceRepository = {
   },
 
   async updateComment(comment: Comment): Promise<Comment> {
+    if (usingMockRepository) {
+      const state = ensureMockState();
+      state.comments = state.comments.map((existing) => (existing.id === comment.id ? comment : existing));
+      return clone(comment);
+    }
+
     return handleSingle(
       supabaseClient
         .from<CommentRow>('comments')
