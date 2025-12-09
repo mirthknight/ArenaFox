@@ -11,14 +11,14 @@ import { useAuth } from '@/features/auth/context/AuthContext';
 export const LoginPage = () => {
   const { loading, progress } = useSplashScreen();
   const { signIn, isSubmitting } = useSupabaseAuth();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (!authLoading && user) {
       router.replace('/');
     }
-  }, [router, user]);
+  }, [authLoading, router, user]);
 
   const handleLogin = async (credentials: LoginCredentials) => {
     const profile = await signIn(credentials);

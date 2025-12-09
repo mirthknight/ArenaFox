@@ -21,6 +21,7 @@ const createMockSupabaseClient = (): SupabaseClient => {
     onAuthStateChange(
       callback: (event: string, session: unknown) => void
     ): { data: { subscription: AuthSubscription } } {
+      setTimeout(() => callback('INITIAL_SESSION', { user: null }), 0);
       setTimeout(() => callback('SIGNED_OUT', null), 0);
       return { data: { subscription } };
     },
