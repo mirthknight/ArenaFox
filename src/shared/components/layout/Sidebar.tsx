@@ -77,9 +77,10 @@ export const Sidebar = () => {
     return (
         <nav
             className={`
-                h-[calc(100vh-64px)] overflow-y-auto bg-[linear-gradient(160deg,rgba(34,40,49,0.98),rgba(57,62,70,0.92))]
+                sticky top-16 self-start h-full max-h-[calc(100vh-4rem-3.25rem)]
+                overflow-y-auto bg-[linear-gradient(160deg,rgba(34,40,49,0.98),rgba(57,62,70,0.92))]
                 border-r border-[var(--af-border)] shadow-[10px_0_35px_rgba(0,0,0,0.35)]
-                transition-all duration-300 flex flex-col sticky top-16 text-[var(--af-ink)]
+                transition-all duration-300 flex flex-col text-[var(--af-ink)]
                 ${collapsed ? 'w-20' : 'w-[17rem]'}
             `}
         >
