@@ -1,4 +1,7 @@
+'use client';
+
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import type { Session } from '@supabase/supabase-js';
 import { supabaseClient } from '@/shared/lib/supabaseClient';
 import { fetchProfile } from '../services/authService';
 import type { UserProfile } from '../types/auth.types';
@@ -22,7 +25,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(profile);
         } catch (error) {
             console.error('[AuthContext] Error fetching profile:', error);
-            // Don't nuke user state immediately on simple fetch error, wait for auth check
+        }
+    };
+
+    const resolveSession = async (session: Session | null, endLoading: boolean) => {
+        if (session?.user?.email) {
+            await fetchUser(session.user.id, session.user.email);
+        } else {
+            setUser(null);
+        }
+
+        if (endLoading) {
+            setLoading(false);
         }
     };
 
@@ -35,62 +49,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         let mounted = true;
+        let initialSessionResolved = false;
 
-        const initAuth = async () => {
-            // Avoid double-setting loading in React StrictMode if already done
-            setLoading(true);
-
-            try {
-                // Create a timeout promise (10 seconds)
-                const timeoutDetails = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Auth timeout')), 10000)
-                );
-
-                const authPromise = (async () => {
-                    const { data: { session }, error } = await supabaseClient.auth.getSession();
-
-                    if (error) throw error;
-
-                    if (session?.user?.email) {
-                        return await fetchProfile(session.user.id, session.user.email);
-                    }
-                    return null;
-                })();
-
-                // Race between auth check and timeout
-                const profile = (await Promise.race([authPromise, timeoutDetails])) as UserProfile | null;
-
-                if (mounted) {
-                    if (profile) {
-                        setUser(profile);
-                    } else {
-                        setUser(null);
-                    }
-                }
-            } catch (error) {
-                // Only log real errors, not timeouts which are expected on slow connections
-                if (mounted) {
-                    if (error instanceof Error && error.message !== 'Auth timeout') {
-                        console.error('[AuthContext] Auth initialization error:', error);
-                    }
-                    setUser(null);
-                }
-            } finally {
-                if (mounted) {
-                    setLoading(false);
-                }
-            }
-        };
+        setLoading(true);
 
         const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'SIGNED_IN' && session?.user?.email) {
-                await fetchUser(session.user.id, session.user.email);
-            } else if (event === 'SIGNED_OUT') {
+            if (!mounted) return;
+
+            if (event === 'INITIAL_SESSION') {
+                initialSessionResolved = true;
+                await resolveSession(session ?? null, true);
+                return;
+            }
+
+            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                await resolveSession(session ?? null, false);
+                return;
+            }
+
+            if (event === 'SIGNED_OUT') {
                 setUser(null);
+                setLoading(false);
             }
         });
 
-        initAuth();
+        supabaseClient.auth
+            .getSession()
+            .then(async ({ data: { session }, error }) => {
+                if (!mounted || initialSessionResolved) return;
+
+                if (error) {
+                    console.error('[AuthContext] Auth initialization error:', error);
+                }
+
+                await resolveSession(session ?? null, true);
+            })
+            .catch((error) => {
+                if (!mounted) return;
+                console.error('[AuthContext] Auth initialization caught error:', error);
+                setUser(null);
+                setLoading(false);
+            });
 
         return () => {
             mounted = false;
@@ -117,8 +116,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-// react-refresh complains when hooks live alongside providers; this hook stays colocated for readability.
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (context === undefined) {

@@ -1,5 +1,7 @@
+'use client';
+
 import { SimpleGrid, Paper, Text, Group, Divider, Stack } from '@mantine/core';
-import { ArrowUpRight, Users, Trophy, TrendingUp, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { ArrowUpRight, Users, Trophy, TrendingUp, ShieldCheck, BadgeCheck, type LucideIcon } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { WorkspaceCreateButton } from '@/features/workspaces';
 
@@ -39,37 +41,59 @@ export const DashboardHome = () => {
                     </Text>
                     <Group gap="sm" c="gray.4">
                         <ShieldCheck size={16} />
-                        <Text size="sm">You are signed in and synced with the dashboard tools.</Text>
-                    </Group>
-                    <Text size="sm" c="gray.5" className="max-w-2xl">
-                        Need a new alliance space? Create a workspace to invite officers, track events, and keep player data scoped
-                        to the right server.
-                    </Text>
-                </Stack>
-                <WorkspaceCreateButton />
-            </div>
-
-            <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
-                <StatCard title="Total Players" value="2,543" icon={Users} trend="4%" />
-                <StatCard title="Active Battles" value="12" icon={Trophy} trend="2%" />
-                <StatCard title="Win Rate" value="68%" icon={TrendingUp} trend="1.4%" />
-                <StatCard title="Total XP" value="892k" icon={Users} trend="5%" />
-            </SimpleGrid>
-
-            <Paper className="p-6 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] text-[var(--af-ink)]" radius="md">
-                <Stack gap="md">
-                    <Group justify="space-between">
-                        <Text fw={700}>This week at a glance</Text>
-                        <Text size="sm" c="gray.5">
-                            Clean, Scandinavian-inspired layout for easier scanning.
+                        <Text size="sm" fw={600}>
+                            Super Admin controls are enabled with RLS protections.
                         </Text>
                     </Group>
-                    <Divider />
-                    <Text size="sm" c="gray.5">
-                        Charts and activity feeds will render here once connected to live data.
-                    </Text>
                 </Stack>
-            </Paper>
+                <div className="flex gap-3 flex-wrap">
+                    <WorkspaceCreateButton triggerVariant="primary" />
+                    <button className="button-ghost" type="button">
+                        View activity
+                    </button>
+                </div>
+            </div>
+
+            <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="lg">
+                <StatCard title="Active members" value="1,284" icon={Users} trend="12%" />
+                <StatCard title="Badges issued" value="342" icon={Trophy} trend="8%" />
+                <StatCard title="Engagement" value="87%" icon={TrendingUp} trend="5%" />
+                <StatCard title="Verified" value="422" icon={ShieldCheck} />
+            </SimpleGrid>
+
+            <Divider className="border-[var(--af-border)]" my="md" />
+
+            <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-2">
+                <Paper className="p-5 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] text-[var(--af-ink)]" radius="md">
+                    <Group justify="space-between" mb="md">
+                        <div>
+                            <Text size="sm" c="gray.5" tt="uppercase" fw={700}>
+                                Workspace health
+                            </Text>
+                            <Text className="text-xl font-bold text-[var(--af-ink)]">Engagement trends</Text>
+                        </div>
+                        <BadgeCheck className="text-[var(--af-accent)]" size={20} />
+                    </Group>
+                    <Text size="sm" c="gray.4">
+                        Activity levels are stable. Consider inviting your alliance captains to the new profile directory.
+                    </Text>
+                </Paper>
+
+                <Paper className="p-5 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] text-[var(--af-ink)]" radius="md">
+                    <Group justify="space-between" mb="md">
+                        <div>
+                            <Text size="sm" c="gray.5" tt="uppercase" fw={700}>
+                                Alerts
+                            </Text>
+                            <Text className="text-xl font-bold text-[var(--af-ink)]">Invites</Text>
+                        </div>
+                        <TrendingUp className="text-[var(--af-accent)]" size={20} />
+                    </Group>
+                    <Text size="sm" c="gray.4">
+                        Invite flows are mocked today. Wire Supabase to deliver real invite links and status changes.
+                    </Text>
+                </Paper>
+            </div>
         </div>
     );
 };

@@ -1,33 +1,30 @@
-import { Button, Container, Title, Text, Stack } from '@mantine/core';
-import { Ghost, Home } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { ThemeIconFrame } from '@/shared/components/ui';
+'use client';
+
+import { Button, Container, Stack, Text, Title } from '@mantine/core';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 
 export const NotFoundPage = () => {
-    const navigate = useNavigate();
+  const router = useRouter();
 
-    return (
-        <Container className="h-full flex items-center justify-center p-8">
-            <Stack align="center" gap="lg" className="text-center">
-                <ThemeIconFrame icon={<Ghost size={32} />} className="w-20 h-20" />
-
-                <div>
-                    <Title order={1} className="text-4xl text-[var(--af-ink)] mb-2">404: Page Not Found</Title>
-                    <Text c="gray.5" size="lg" maw={500}>
-                        The page you are looking for has vanished into the void. It might have been moved, deleted, or never existed in the first place.
-                    </Text>
-                </div>
-
-                <Button
-                    size="lg"
-                    variant="light"
-                    color="fox"
-                    leftSection={<Home size={18} />}
-                    onClick={() => navigate('/')}
-                >
-                    Return to Dashboard
-                </Button>
-            </Stack>
-        </Container>
-    );
+  return (
+    <Container size="sm" className="py-20 text-center text-[var(--af-ink)]">
+      <Stack gap="md" align="center">
+        <Title order={1} className="gradient-text">
+          Page not found
+        </Title>
+        <Text c="gray.4" maw={420}>
+          The page you are looking for does not exist or has been moved.
+        </Text>
+        <Button
+          variant="light"
+          color="fox"
+          leftSection={<ArrowLeft size={16} />}
+          onClick={() => router.replace('/')}
+        >
+          Back to dashboard
+        </Button>
+      </Stack>
+    </Container>
+  );
 };

@@ -8,9 +8,11 @@ export interface MemberProfile {
     bio: string;
     badges: string[];
     likes: number;
+    isLiked?: boolean;
     isVerified: boolean;
     isEnabled: boolean;
     statusLabel?: string | null;
+    avatarUrl?: string | null;
     avatarColor?: string;
 }
 

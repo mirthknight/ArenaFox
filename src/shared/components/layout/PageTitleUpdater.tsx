@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 
 const TITLE_MAP: Record<string, string> = {
     '/login': 'Login',
@@ -9,16 +11,17 @@ const TITLE_MAP: Record<string, string> = {
 };
 
 export const PageTitleUpdater = () => {
-    const location = useLocation();
+    const pathname = usePathname();
 
     useEffect(() => {
+        if (!pathname) return;
         const matchingEntry = Object.keys(TITLE_MAP).find((path) =>
-            path === '/' ? location.pathname === path : location.pathname.startsWith(path)
+            path === '/' ? pathname === path : pathname.startsWith(path)
         );
 
         const pageTitle = matchingEntry ? TITLE_MAP[matchingEntry] : 'Arena Fox';
         document.title = `${pageTitle} • Arena Fox`;
-    }, [location.pathname]);
+    }, [pathname]);
 
     return null;
 };

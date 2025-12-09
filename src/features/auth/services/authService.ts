@@ -16,7 +16,8 @@ interface ProfileResponseRow {
 
 const SUPER_ADMIN_ROLE = 'super_admin';
 
-const getSuperAdminEmail = () => import.meta.env.VITE_SUPER_ADMIN_EMAIL?.toLowerCase().trim();
+const getSuperAdminEmail = () =>
+  (process.env.NEXT_PUBLIC_SUPER_ADMIN_EMAIL ?? process.env.VITE_SUPER_ADMIN_EMAIL)?.toLowerCase().trim();
 
 const mapProfile = (
   userId: string,
@@ -44,7 +45,6 @@ const mapProfile = (
 
 export const fetchProfile = async (userId: string, email: string): Promise<UserProfile> => {
   try {
-    // Create a timeout for the database query to prevent hanging on RLS issues
     const dbPromise = supabaseClient
       .from('user_accounts')
       .select(
@@ -57,21 +57,17 @@ export const fetchProfile = async (userId: string, email: string): Promise<UserP
       setTimeout(() => reject(new Error('DB Query Timeout')), 3000)
     );
 
-    const { data, error } = await Promise.race([dbPromise, timeoutPromise]) as Awaited<typeof dbPromise>;
+    const { data, error } = (await Promise.race([dbPromise, timeoutPromise])) as Awaited<typeof dbPromise>;
 
     if (error) {
       console.error('[authService] fetchProfile error:', error);
-      // Fallthrough to fallback
     } else {
       return mapProfile(userId, email, data ?? undefined);
     }
   } catch (err) {
     console.error('[authService] fetchProfile caught error (or timeout):', err);
-    // Fallthrough to fallback
   }
 
-  // Fallback: Return a valid profile based on the authenticated credentials
-  // This ensures the user can at least log in even if the database table is locked/empty
   return mapProfile(userId, email, null);
 };
 

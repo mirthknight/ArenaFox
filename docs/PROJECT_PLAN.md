@@ -17,12 +17,13 @@ This plan tracks the requirements from the latest user brief and how the repo sa
 - Supabase schema defined in `database/schema.sql` plus execution guidance in `database/EXECUTION_GUIDE.md`.
 - Dashboard and admin tools now use a light, Scandinavian-inspired layout with simplified data tables, a mock-data notice bar, dynamic page titles, and modal-driven profile editing.
 - Sidebar styling refreshed with clearer active highlights and admin nav badges, and the admin user management view is broken into reusable components for easier iteration.
-- SPA-friendly routing guardrails were added (login redirect rules, authenticated 404, static 404.html fallback) to handle deep links like `/login` on a fresh load.
-- Workspaces now have domain models backed by Supabase tables (workspaces, members, invites, players, events, change requests, activity, and comments), a singleton store with summary selectors, and persistence helpers for both Supabase and local storage.
+- Workspaces now have domain models backed by Supabase tables (workspaces, members, invites, players, events, change requests, activity, and comments), a singleton store with summary selectors, and server-first persistence helpers (no local storage reliance).
 - Workspace state auto-detects when Supabase is unavailable and loads seeded mock data so the UI stays usable during local development or outages.
 - Workspace creation controls are surfaced on the dashboard home and sidebar, using the workspace store to seed new alliances even when Supabase is offline.
+- Next.js App Router scaffold in place (root/login routes plus authenticated dashboard, profiles, and admin areas) with shared Mantine/Tailwind providers and Supabase-aware auth guards.
 
 ## Immediate Next Steps
+- Continue migrating feature modules to Next.js layouts (app directory) and delete remaining Vite-only assets once parity is confirmed.
 - Wire the profile directory and admin management views to Supabase tables (accounts, profiles, badges, likes, invites) once backend data is available.
 - Add invite creation and acceptance flows (no public signup) using the `user_invites` table.
 - Replace mock profile/badge/like data with real queries (see `database/QUERIES.md`) and surface error handling in the UI.
@@ -32,6 +33,7 @@ This plan tracks the requirements from the latest user brief and how the repo sa
 - **Schema**: `database/schema.sql` (Supabase-compatible DDL for accounts, profiles, badges, likes, invites, and RLS policies).
 - **Queries**: `database/QUERIES.md` (ready-to-run SQL snippets for profile listings, likes, badge assignments, and invite management).
 - **Setup**: `database/EXECUTION_GUIDE.md` (how to apply the schema and provision admin credentials without committing secrets).
+- **Migration/Platform**: `docs/NEXTJS_MIGRATION_NOTES.md` and `docs/NEXTJS_MIGRATION_TODO.md` (roadmap for moving from Vite SPA to Next.js while keeping UI parity and enabling Supabase-backed data).
 
 ## How to Update This Plan
 - Add or complete checklist items as work progresses.

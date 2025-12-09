@@ -286,6 +286,16 @@ create table if not exists public.comments (
   is_edited boolean not null default false
 );
 
+-- DATA TABLE: workspace_state_snapshots (server-side cache for client state hydration)
+create table if not exists public.workspace_state_snapshots (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  workspace_id uuid references public.workspaces (id) on delete cascade,
+  state_json jsonb not null default '{}'::jsonb,
+  updated_at timestamptz default timezone('utc', now()),
+  unique (user_id, workspace_id)
+);
+
 create unique index if not exists user_invites_unique_pending on public.user_invites (invitee_email, status)
   where status in ('pending', 'sent');
 
@@ -308,6 +318,7 @@ alter table public.event_participations enable row level security;
 alter table public.change_requests enable row level security;
 alter table public.activity_logs enable row level security;
 alter table public.comments enable row level security;
+alter table public.workspace_state_snapshots enable row level security;
 
 -- CLEANUP: Drop existing policies to avoid conflicts or infinite recursions
 drop policy if exists "Users can view own account" on public.user_accounts;
@@ -336,6 +347,7 @@ drop policy if exists "Workspace members can manage event participations" on pub
 drop policy if exists "Workspace members can manage change requests" on public.change_requests;
 drop policy if exists "Workspace members can manage activity" on public.activity_logs;
 drop policy if exists "Workspace members can manage comments" on public.comments;
+drop policy if exists "Users can manage own workspace state snapshots" on public.workspace_state_snapshots;
 
 -- HELPER: Check super admin status without recursion
 -- We use SECURITY DEFINER so this runs with admin privileges, bypassing RLS
@@ -466,3 +478,7 @@ create policy "Workspace members can manage activity" on public.activity_logs
 
 create policy "Workspace members can manage comments" on public.comments
   for all using (public.is_workspace_member(workspace_id));
+
+-- POLICIES: workspace_state_snapshots
+create policy "Users can manage own workspace state snapshots" on public.workspace_state_snapshots
+  for all using (auth.uid() = user_id);

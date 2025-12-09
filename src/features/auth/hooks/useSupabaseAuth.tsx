@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { notifications } from '@mantine/notifications';
 import { ShieldCheck, ShieldOff } from 'lucide-react';
