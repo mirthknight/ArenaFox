@@ -53,11 +53,11 @@ export const fetchProfile = async (userId: string, email: string): Promise<UserP
       .eq('id', userId)
       .maybeSingle();
 
-    const timeoutPromise = new Promise((_, reject) =>
+    const timeoutPromise = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error('DB Query Timeout')), 3000)
     );
 
-    const { data, error } = await Promise.race([dbPromise, timeoutPromise]) as any;
+    const { data, error } = await Promise.race([dbPromise, timeoutPromise]) as Awaited<typeof dbPromise>;
 
     if (error) {
       console.error('[authService] fetchProfile error:', error);
