@@ -64,7 +64,7 @@ export const ProfileDirectory = () => {
                     <Card key={profile.id} className="glass-panel" radius="lg" shadow="xl" p="lg">
                         <Group justify="space-between" align="flex-start">
                             <Group gap="md">
-                                <Avatar src={profile.avatarUrl} size="lg" radius="xl" color="fox">
+                                <Avatar src={profile.avatarUrl || undefined} size="lg" radius="xl" color={profile.avatarColor ?? 'fox'}>
                                     {profile.displayName.charAt(0)}
                                 </Avatar>
                                 <div>

@@ -159,8 +159,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
             Sign in securely
           </Button>
 
-          <Divider label="Secure by Supabase" labelPosition="center" labelProps={{ c: 'gray.5', fw: 600 }}
-            classNames={{ label: 'tracking-[0.08em] uppercase text-xs' }}
+          <Divider
+            label={(
+              <Text c="gray.5" fw={600} className="tracking-[0.08em] uppercase text-xs">
+                Secure by Supabase
+              </Text>
+            )}
+            labelPosition="center"
           />
 
           <Text size="sm" c="gray.5" ta="center">

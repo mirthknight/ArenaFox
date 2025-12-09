@@ -12,6 +12,7 @@ export interface MemberProfile {
     isVerified: boolean;
     isEnabled: boolean;
     statusLabel?: string | null;
+    avatarUrl?: string | null;
     avatarColor?: string;
 }
 
