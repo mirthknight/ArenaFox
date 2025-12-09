@@ -1,9 +1,9 @@
+'use client';
+
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl =
-  import.meta.env.NEXT_PUBLIC_SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey =
-  import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.VITE_SUPABASE_ANON_KEY;
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
@@ -21,7 +21,6 @@ const createMockSupabaseClient = (): SupabaseClient => {
     onAuthStateChange(
       callback: (event: string, session: unknown) => void
     ): { data: { subscription: AuthSubscription } } {
-      // Immediately notify listeners that no authenticated session exists
       setTimeout(() => callback('SIGNED_OUT', null), 0);
       return { data: { subscription } };
     },

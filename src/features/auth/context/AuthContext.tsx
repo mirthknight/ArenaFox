@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabaseClient } from '@/shared/lib/supabaseClient';
 import { fetchProfile } from '../services/authService';
@@ -22,7 +24,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(profile);
         } catch (error) {
             console.error('[AuthContext] Error fetching profile:', error);
-            // Don't nuke user state immediately on simple fetch error, wait for auth check
         }
     };
 
@@ -37,11 +38,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         let mounted = true;
 
         const initAuth = async () => {
-            // Avoid double-setting loading in React StrictMode if already done
             setLoading(true);
 
             try {
-                // Create a timeout promise (10 seconds)
                 const timeoutDetails = new Promise((_, reject) =>
                     setTimeout(() => reject(new Error('Auth timeout')), 10000)
                 );
@@ -57,18 +56,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     return null;
                 })();
 
-                // Race between auth check and timeout
                 const profile = (await Promise.race([authPromise, timeoutDetails])) as UserProfile | null;
 
                 if (mounted) {
-                    if (profile) {
-                        setUser(profile);
-                    } else {
-                        setUser(null);
-                    }
+                    setUser(profile);
                 }
             } catch (error) {
-                // Only log real errors, not timeouts which are expected on slow connections
                 if (mounted) {
                     if (error instanceof Error && error.message !== 'Auth timeout') {
                         console.error('[AuthContext] Auth initialization error:', error);
@@ -117,8 +110,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-// react-refresh complains when hooks live alongside providers; this hook stays colocated for readability.
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (context === undefined) {

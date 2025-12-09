@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import {
   Anchor,
@@ -20,18 +22,11 @@ interface LoginFormProps {
   isSubmitting?: boolean;
 }
 
-/**
- * Login form component with email/password inputs and remember me option
- * Uses notification-based error messages with fox icon
- */
 export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) => {
   const [rememberMe, setRememberMe] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  /**
-   * Shows error notification with fox icon and danger/red colors
-   */
   const showErrorNotification = (message: string) => {
     notifications.show({
       title: 'Arena Fox',
@@ -63,9 +58,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
     });
   };
 
-  /**
-   * Validates email and returns error message if invalid
-   */
   const validateEmail = (value: string): string | null => {
     if (!value || value.trim() === '') {
       return 'Email field is empty. Please enter your email address to continue.';
@@ -77,179 +69,105 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
     return null;
   };
 
-  /**
-   * Validates password and returns error message if invalid
-   */
   const validatePassword = (value: string): string | null => {
     if (!value || value.trim() === '') {
-      return 'Password field is empty. Please enter your password to continue.';
+      return 'Password is required to continue. Please enter your password.';
     }
     if (value.length < 6) {
-      return 'Invalid password. Password must be at least 6 characters long.';
+      return 'Password is too short. Use at least 6 characters (preferably 12+ for security).';
     }
     return null;
   };
 
-  /**
-   * Validates entire form and shows appropriate error notifications
-   */
-  const validateForm = (): boolean => {
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
 
-    // Show specific error messages
-    if (emailError && passwordError) {
-      // Both fields are invalid
-      showErrorNotification('Please enter both a valid email address and password to continue.');
-      return false;
-    }
-
-    if (emailError) {
-      showErrorNotification(emailError);
-      return false;
-    }
-
-    if (passwordError) {
-      showErrorNotification(passwordError);
-      return false;
-    }
-
-    return true;
-  };
-
-  /**
-   * Handles form submission with validation
-   * Prevents browser default validation and shows notification errors
-   */
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Validate form and show specific error notifications
-    if (!validateForm()) {
+    if (emailError || passwordError) {
+      showErrorNotification(emailError ?? passwordError ?? 'Invalid credentials');
       return;
     }
 
-    const credentials: LoginCredentials = {
-      email: email.trim(),
-      password,
-      rememberMe,
-    };
+    if (!onSubmit) return;
 
-    if (onSubmit) {
-      await onSubmit(credentials);
-    } else {
-      // Default behavior: show notification
-      notifications.show({
-        title: 'Arena Fox',
-        message: 'Logged in. Create and manage your workspaces after you enter.',
-        color: 'fox',
-        icon: <LogIn size={16} />,
-      });
+    try {
+      await onSubmit({ email, password, rememberMe });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Login failed, please try again.';
+      showErrorNotification(message);
     }
   };
 
   return (
-    <Card radius="xl" padding="lg" className="glass-panel text-[var(--af-ink)]">
-      <Stack gap="md">
-        <Group justify="space-between" align="center">
+    <Card shadow="xl" padding="lg" radius="lg" className="glass-panel">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <Stack gap="sm">
           <div>
-            <Text size="sm" c="gray.4">
-              Secure access
+            <Title order={3} className="text-[var(--af-ink)]">Sign in</Title>
+            <Text size="sm" c="gray.5">
+              Use your Arena Fox credentials to continue.
             </Text>
-            <Title order={3} c="white">
-              Log in to continue
-            </Title>
           </div>
-        </Group>
 
-        <form className="space-y-4" onSubmit={handleSubmit} noValidate>
           <TextInput
-            type="email"
             label="Email"
-            placeholder="captain@arenafox.gg"
+            placeholder="you@arenafox.gg"
+            radius="md"
+            size="md"
+            leftSection={<LogIn size={18} />}
             value={email}
-            onChange={(e) => setEmail(e.currentTarget.value)}
-            leftSection={<ShieldCheck size={16} />}
-            radius="md"
-            styles={{
-              input: { backgroundColor: 'rgba(34,40,49,0.6)', color: 'var(--af-ink)' },
-              label: { color: 'var(--af-ink-soft)' },
-            }}
-          />
-          <TextInput
-            type="password"
-            label="Password"
-            placeholder="••••••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-            leftSection={<ShieldCheck size={16} />}
-            radius="md"
-            styles={{
-              input: { backgroundColor: 'rgba(34,40,49,0.6)', color: 'var(--af-ink)' },
-              label: { color: 'var(--af-ink-soft)' },
-            }}
+            onChange={(event) => setEmail(event.currentTarget.value)}
+            required
+            classNames={{ input: 'bg-[rgba(57,62,70,0.6)] border-[var(--af-border)] text-[var(--af-ink)]' }}
           />
 
-          <Group justify="space-between" align="center" mt="xs">
+          <TextInput
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            radius="md"
+            size="md"
+            value={password}
+            onChange={(event) => setPassword(event.currentTarget.value)}
+            required
+            classNames={{ input: 'bg-[rgba(57,62,70,0.6)] border-[var(--af-border)] text-[var(--af-ink)]' }}
+          />
+
+          <Group justify="space-between" align="center">
             <Switch
-              size="md"
-              color="fox"
+              label="Remember me"
               checked={rememberMe}
               onChange={(event) => setRememberMe(event.currentTarget.checked)}
-              label={
-                <Stack gap={0}>
-                  <Text size="sm" c="white">
-                    Remember me
-                  </Text>
-                  <Text size="xs" c="gray.4">
-                    Keep this device ready for quick access.
-                  </Text>
-                </Stack>
-              }
+              color="fox"
             />
-            <Anchor size="sm" href="#" underline="hover" c="fox.2">
+            <Anchor href="#" underline="hover" size="sm" c="fox.4">
               Forgot password?
             </Anchor>
           </Group>
 
           <Button
             type="submit"
-            fullWidth
-            leftSection={<LogIn size={16} />}
+            size="md"
             radius="md"
-            size="sm"
-            color="fox"
+            fullWidth
             loading={isSubmitting}
-            disabled={isSubmitting}
+            leftSection={<ShieldCheck size={18} />}
+            className="bg-gradient-to-r from-[var(--af-accent-strong)] to-[var(--af-accent)] text-[var(--af-ink)]"
           >
-            {isSubmitting ? 'Securing session…' : 'Continue to Arena Fox'}
+            Sign in securely
           </Button>
-          <Button
-            fullWidth
-            variant="outline"
-            radius="md"
-            size="sm"
-            color="fox"
-            leftSection={<span className="text-lg">G</span>}
-            disabled
-          >
-            Continue with Gmail
-          </Button>
-        </form>
 
-        <Divider my="sm" variant="dashed" color="gray.7" />
+          <Divider label="Secure by Supabase" labelPosition="center" labelProps={{ c: 'gray.5', fw: 600 }}
+            classNames={{ label: 'tracking-[0.08em] uppercase text-xs' }}
+          />
 
-        <Stack gap={4}>
-          <Text size="sm" fw={600} c="white">
-            Workspace guidance
-          </Text>
-          <Text size="sm" c="gray.4">
-            Set up workspaces after you sign in—no extra steps required.
+          <Text size="sm" c="gray.5" ta="center">
+            Need an invite? Contact your Arena Fox admin.
           </Text>
         </Stack>
-      </Stack>
+      </form>
     </Card>
   );
 };
-

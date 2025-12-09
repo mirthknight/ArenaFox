@@ -1,64 +1,49 @@
-import { useEffect, useRef, useState } from 'react';
-import { config } from '@/shared/constants/config';
+'use client';
 
-/**
- * Custom hook to manage splash screen state and progress
- * Handles loading progress animation and minimum display duration
- */
-export const useSplashScreen = () => {
+import { useEffect, useState } from 'react';
+
+interface SplashState {
+  loading: boolean;
+  progress: number;
+}
+
+export const useSplashScreen = (): SplashState => {
   const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(10);
-  const [isReady, setIsReady] = useState(document.readyState === 'complete');
-  const startTimeRef = useRef<number>(performance.now());
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    let rafId: number;
+    let mounted = true;
+
+    const animateProgress = () => {
+      setProgress((current) => {
+        if (current >= 100) return current;
+        return Math.min(100, current + Math.random() * 10);
+      });
+      rafId = requestAnimationFrame(animateProgress);
+    };
+
     const handleReadyState = () => {
       if (document.readyState === 'complete') {
-        setIsReady(true);
+        setTimeout(() => {
+          if (mounted) {
+            setLoading(false);
+            cancelAnimationFrame(rafId);
+          }
+        }, 600);
       }
     };
 
-    const timer = setInterval(() => {
-      setProgress((value) => {
-        const target = isReady ? 100 : 93;
-        if (value >= target) {
-          return value;
-        }
-
-        const increment =
-          config.splash.progressIncrement.min +
-          Math.random() * (config.splash.progressIncrement.max - config.splash.progressIncrement.min);
-        return Math.min(value + increment, target);
-      });
-    }, config.splash.progressInterval);
-
+    animateProgress();
     handleReadyState();
-    document.addEventListener('readystatechange', handleReadyState);
+    window.addEventListener('load', handleReadyState);
 
     return () => {
-      clearInterval(timer);
-      document.removeEventListener('readystatechange', handleReadyState);
+      mounted = false;
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('load', handleReadyState);
     };
-  }, [isReady, startTimeRef]);
-
-  useEffect(() => {
-    if (!isReady) {
-      return undefined;
-    }
-
-    setProgress(100);
-
-    const elapsed = performance.now() - startTimeRef.current;
-    const minimumDuration = config.splash.minDuration;
-    const delay = Math.max(450, minimumDuration - elapsed);
-
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, delay);
-
-    return () => clearTimeout(timeout);
-  }, [isReady]);
+  }, []);
 
   return { loading, progress };
 };
-

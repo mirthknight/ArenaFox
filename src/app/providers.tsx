@@ -1,17 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+'use client';
+
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import App from './App';
-import './index.css';
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-
-import { BrowserRouter } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import { AuthProvider } from '@/features/auth/context/AuthContext';
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+interface ProvidersProps {
+  children: ReactNode;
+}
+
+export const Providers = ({ children }: ProvidersProps) => {
+  return (
     <MantineProvider
       defaultColorScheme="dark"
       theme={{
@@ -26,11 +25,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       }}
     >
       <Notifications position="top-right" limit={3} />
-      <BrowserRouter>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </BrowserRouter>
+      <AuthProvider>{children}</AuthProvider>
     </MantineProvider>
-  </React.StrictMode>
-);
+  );
+};

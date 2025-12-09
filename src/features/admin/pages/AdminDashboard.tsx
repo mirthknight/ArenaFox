@@ -1,8 +1,10 @@
-import { useMemo, useState } from 'react';
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
 import { Badge, Divider, Group, Paper, Stack, Text } from '@mantine/core';
 import { MailPlus } from 'lucide-react';
 import { notifications } from '@mantine/notifications';
-import { Navigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { defaultProfiles, type MemberProfile } from '@/features/profiles/data/mockProfiles';
 import { AdminPageHeader } from '../components/AdminPageHeader';
@@ -15,6 +17,7 @@ const createInitialUsers = () => defaultProfiles.map((profile) => ({ ...profile,
 
 export const AdminDashboard = () => {
     const { user } = useAuth();
+    const router = useRouter();
     const [search, setSearch] = useState('');
     const [inviteEmail, setInviteEmail] = useState('');
     const [inviteRole, setInviteRole] = useState<MemberProfile['role']>('member');
@@ -26,6 +29,12 @@ export const AdminDashboard = () => {
     const canModerate = canVerify || user?.role === 'admin';
     const canEditRole = user?.role === 'super_admin';
     const isAdminUser = canModerate;
+
+    useEffect(() => {
+        if (user && !isAdminUser) {
+            router.replace('/');
+        }
+    }, [isAdminUser, router, user]);
 
     const filteredUsers = useMemo(
         () =>
@@ -137,7 +146,7 @@ export const AdminDashboard = () => {
     };
 
     if (!isAdminUser) {
-        return <Navigate to="/" replace />;
+        return null;
     }
 
     return (

@@ -1,13 +1,13 @@
 # Arena Fox Login UI
 
-Modern, interactive login experience for the Arena Fox dashboard (Kingshot event management). Built with React, TypeScript, Vite, Tailwind CSS, Mantine components, Headless UI switches, and motion-enhanced iconography.
+Modern, interactive login experience for the Arena Fox dashboard (Kingshot event management). Built with Next.js (App Router), TypeScript, Tailwind CSS, Mantine components, Headless UI switches, and motion-enhanced iconography.
 
 ## Scripts
 - `npm install` — install dependencies
-- `npm run dev` — start local dev server
+- `npm run dev` — start the Next.js dev server
 - `npm run build` — type-check and build for production
-- `npm run preview` — preview the production build locally
-- `npm run lint` — run ESLint for TypeScript/React files
+- `npm start` — serve the production build
+- `npm run lint` — run ESLint with Next.js core web vitals rules
 
 ## Notes
 - Design includes placeholders for vector illustrations; see `IMAGE_ASSETS.md` for guidance and suggested subjects.
@@ -15,7 +15,7 @@ Modern, interactive login experience for the Arena Fox dashboard (Kingshot event
 - Supports responsive breakpoints, neon gradients, and dark-default theming for the Arena Fox aesthetic.
 
 ## Supabase security setup
-Use Supabase for authentication and role-gated dashboard controls. Keep your keys in a private `.env` file (never commit them). The app expects (use `NEXT_PUBLIC_*` keys to match the provided Supabase project, with `VITE_*` still supported for local fallback):
+Use Supabase for authentication and role-gated dashboard controls. Keep your keys in a private `.env` file (never commit them). The app expects (use `NEXT_PUBLIC_*` keys, with `VITE_*` still supported for local fallback):
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>

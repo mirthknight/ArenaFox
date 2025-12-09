@@ -25,7 +25,6 @@ body {
   font-feature-settings: 'ss01' on, 'cv02' on;
 }
 
-
 .glass-panel {
   background: linear-gradient(160deg, rgba(57, 62, 70, 0.92), rgba(34, 40, 49, 0.92));
   border: 1px solid var(--af-border);
@@ -67,7 +66,6 @@ body {
   border-color: rgba(238, 238, 238, 0.2);
   background: rgba(57, 62, 70, 0.8);
 }
-
 
 .card-grid {
   @apply grid gap-4 md:gap-5 grid-cols-1 sm:grid-cols-2;

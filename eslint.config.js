@@ -3,18 +3,18 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
+import nextPlugin from '@next/eslint-plugin-next';
 
 export default [
   {
-    ignores: ['dist'],
+    ignores: ['dist', '.next', 'node_modules'],
   },
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
-      globals: globals.browser,
+      globals: { ...globals.browser, ...globals.node },
       parser: tsParser,
       parserOptions: {
         ecmaFeatures: { jsx: true },
@@ -24,17 +24,17 @@ export default [
     plugins: {
       '@typescript-eslint': tsPlugin,
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      '@next/next': nextPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...tsPlugin.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      ...nextPlugin.configs.recommended.rules,
     },
   },
   {
-    files: ['vite.config.ts', 'vite.config.js', 'eslint.config.js'],
+    files: ['eslint.config.js'],
     languageOptions: {
       globals: globals.node,
       parser: tsParser,

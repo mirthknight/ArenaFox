@@ -1,18 +1,29 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '@/features/auth/context/AuthContext';
+'use client';
+
+import { type ReactNode, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { LoadingOverlay } from '@mantine/core';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
-export const RequireAuth = () => {
-    const { user, loading } = useAuth();
-    const location = useLocation();
+interface RequireAuthProps {
+  children: ReactNode;
+}
 
-    if (loading) {
-        return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
+export const RequireAuth = ({ children }: RequireAuthProps) => {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace('/login');
     }
+  }, [loading, router, user]);
 
-    if (!user) {
-        return <Navigate to="/login" replace state={{ from: location }} />;
-    }
+  if (loading || (!user && typeof window !== 'undefined')) {
+    return <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
+  }
 
-    return <Outlet />;
+  if (!user) return null;
+
+  return <>{children}</>;
 };
