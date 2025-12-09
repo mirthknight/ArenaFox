@@ -62,8 +62,8 @@ export const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
                             <item.icon size={18} />
                         </span>
                         {!collapsed && (
-                            <div className="flex-1 flex items-center gap-2">
-                                <Text size="sm" fw={600} className="tracking-tight">
+                            <div className="flex-1 min-w-0 flex items-center gap-2">
+                                <Text size="sm" fw={600} className="tracking-tight truncate">
                                     {item.label}
                                 </Text>
                                 {item.badge && (
@@ -92,11 +92,11 @@ export const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
                 ${collapsed ? 'md:w-20' : 'md:w-[17rem]'}
                 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
                 md:sticky md:top-16 md:bottom-auto md:min-h-[calc(100vh-4rem)] md:max-h-[calc(100vh-4rem)]
-                overflow-y-auto
+                overflow-y-auto scroll-py-4
             `}
             aria-label="Sidebar navigation"
         >
-            <div className="flex-1 py-5 px-3 space-y-4">
+            <div className="flex-1 px-3 pt-4 pb-2 md:pb-3 flex flex-col gap-3">
                 <Stack gap="xs">
                     <Text size="xs" fw={700} c="gray.5" className="px-3 uppercase tracking-[0.2em]">
                         {!collapsed ? 'Menu' : '...'}
@@ -107,7 +107,7 @@ export const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
                 </Stack>
 
                 {isAdmin && (
-                    <Stack gap="xs">
+                    <Stack gap="xs" className="pt-1">
                         <Text size="xs" fw={700} c="gray.5" className="px-3 uppercase tracking-[0.2em]">
                             {!collapsed ? 'Admin' : '...'}
                         </Text>
