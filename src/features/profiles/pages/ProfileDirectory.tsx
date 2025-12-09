@@ -3,7 +3,6 @@ import {
     ActionIcon,
     Avatar,
     Group,
-    Stack,
     Text,
     Title,
     Tooltip,

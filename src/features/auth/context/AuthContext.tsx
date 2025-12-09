@@ -117,6 +117,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
+// react-refresh complains when hooks live alongside providers; this hook stays colocated for readability.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (context === undefined) {
