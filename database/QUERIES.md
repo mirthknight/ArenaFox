@@ -91,3 +91,56 @@ insert into public.user_profiles (id, display_name, avatar_url, bio)
 values ('<user-uuid>', '<name>', '', '')
 on conflict (id) do update set updated_at = timezone('utc', now());
 ```
+
+## Workspace: create workspace and attach owner
+```sql
+insert into public.workspaces (name, slug, server_id, alliance_name, alliance_tag, description, default_timezone, created_by_user_id)
+values ('Server 1161 – MEM', 'server-1161-mem', 1161, 'MEM', 'MEM', 'Main MEM roster', 'UTC', auth.uid())
+returning *;
+
+insert into public.workspace_members (workspace_id, user_id, role)
+values ('<workspace-uuid>', auth.uid(), 'OWNER')
+on conflict (workspace_id, user_id) do update set role = excluded.role;
+```
+
+## Workspace: default event templates (global rows)
+```sql
+insert into public.event_types (workspace_id, code, name, category, description, is_enabled_by_default, default_fields)
+values
+  (null, 'BEAR_TRAP', 'Bear Trap', 'ALLIANCE_EVENT', 'Alliance rally event', true, '["trapLevel","totalDamage","numberOfRallies","rewardTier"]'),
+  (null, 'ALLIANCE_MOBILIZATION', 'Alliance Mobilization', 'ALLIANCE_EVENT', 'Timed tasks for alliance points', true, '["cycleId","totalAlliancePoints","playerPoints","rank"]')
+on conflict (code) do nothing;
+```
+
+## Workspace: hydrate data for a member
+```sql
+-- Find workspace ids the current user can view
+with scoped_workspaces as (
+  select id from public.workspaces where created_by_user_id = auth.uid()
+  union
+  select workspace_id from public.workspace_members where user_id = auth.uid()
+)
+select * from public.workspaces where id in (select id from scoped_workspaces);
+
+select * from public.workspace_members where workspace_id in (select id from scoped_workspaces);
+select * from public.players where workspace_id in (select id from scoped_workspaces);
+select * from public.event_sessions where workspace_id in (select id from scoped_workspaces);
+select * from public.event_participations where event_session_id in (select id from public.event_sessions where workspace_id in (select id from scoped_workspaces));
+select * from public.change_requests where workspace_id in (select id from scoped_workspaces);
+select * from public.activity_logs where workspace_id in (select id from scoped_workspaces);
+select * from public.comments where workspace_id in (select id from scoped_workspaces);
+```
+
+## Workspace: accept invite and add member
+```sql
+update public.workspace_invites
+set status = 'ACCEPTED'
+where token = '<invite-token>'
+  and status = 'PENDING'
+  and expires_at > now()
+returning workspace_id, role_offered;
+
+insert into public.workspace_members (workspace_id, user_id, role)
+values ('<workspace-uuid>', '<user-uuid>', 'EDITOR')
+on conflict (workspace_id, user_id) do update set role = excluded.role;
+```

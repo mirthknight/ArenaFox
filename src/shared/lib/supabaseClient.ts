@@ -1,20 +1,64 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl =
   import.meta.env.NEXT_PUBLIC_SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey =
   import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Supabase client is not configured. Add NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY (or VITE_* equivalents) to your environment before starting the app.'
-  );
-}
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
-export const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true,
-  },
-});
+type AuthSubscription = { unsubscribe: () => void };
+
+const createMockSupabaseClient = (): SupabaseClient => {
+  const subscription: AuthSubscription = {
+    unsubscribe: () => undefined,
+  };
+
+  const auth = {
+    async getSession() {
+      return { data: { session: null }, error: null } as const;
+    },
+    onAuthStateChange(
+      callback: (event: string, session: unknown) => void
+    ): { data: { subscription: AuthSubscription } } {
+      // Immediately notify listeners that no authenticated session exists
+      setTimeout(() => callback('SIGNED_OUT', null), 0);
+      return { data: { subscription } };
+    },
+    async signOut() {
+      return { error: null } as const;
+    },
+    async signInWithPassword() {
+      return {
+        data: { session: null },
+        error: new Error('Supabase is not configured; running in mock auth mode.'),
+      } as const;
+    },
+  };
+
+  const createErrorResponse = (message: string) => ({
+    data: null,
+    error: new Error(message),
+  });
+
+  const from = () => ({
+    select: () => Promise.resolve(createErrorResponse('Supabase unavailable')),
+    insert: () => Promise.resolve(createErrorResponse('Supabase unavailable')),
+    update: () => Promise.resolve(createErrorResponse('Supabase unavailable')),
+    delete: () => Promise.resolve(createErrorResponse('Supabase unavailable')),
+    eq: () => ({ select: () => Promise.resolve(createErrorResponse('Supabase unavailable')) }),
+    in: () => ({ select: () => Promise.resolve(createErrorResponse('Supabase unavailable')) }),
+  });
+
+  return { auth, from } as unknown as SupabaseClient;
+};
+
+export const supabaseClient: SupabaseClient = isSupabaseConfigured
+  ? createClient(supabaseUrl!, supabaseAnonKey!, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+      },
+    })
+  : createMockSupabaseClient();
