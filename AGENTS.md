@@ -8,6 +8,7 @@ These notes apply to the entire repository. Keep this file and `docs/PROJECT_PLA
 2. Ensure database SQL schema and key queries are documented and available for Supabase.
 3. Organize code, modules, and logic into reusable folders and components.
 4. Do not include sensitive information (credentials, secrets, personal data) in code or docs.
+5. Keep the website fully responsive and mobile-friendly; align UI elements consistently across breakpoints.
 
 ## Working Notes
 - Update `docs/PROJECT_PLAN.md` whenever requirements change or milestones are completed so new contributors can see history and next steps.
