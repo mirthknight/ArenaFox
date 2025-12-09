@@ -1,4 +1,4 @@
-import { Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
+import { Stack, Text, Tooltip, UnstyledButton, Badge } from '@mantine/core';
 import {
     LayoutDashboard,
     Users,
@@ -6,7 +6,7 @@ import {
     ChevronLeft,
     ChevronRight
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type ElementType } from 'react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -28,26 +28,47 @@ export const Sidebar = () => {
 
     const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
 
-    const NavItem = ({ item }: { item: any }) => {
-        const isActive = location.pathname === item.path;
+    const NavItem = ({ item }: { item: { label: string; icon: ElementType; path: string; badge?: string } }) => {
+        const isActive = location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
         return (
             <Tooltip label={item.label} position="right" disabled={!collapsed} withArrow>
                 <UnstyledButton
                     onClick={() => navigate(item.path)}
-                    className={`
-                        w-full flex items-center p-3 mb-1 rounded-lg transition-all duration-200
-                        ${isActive
-                            ? 'bg-[rgba(0,173,181,0.18)] text-[var(--af-ink)] border-r-2 border-[var(--af-accent)] shadow-[0_10px_30px_rgba(0,0,0,0.28)]'
-                            : 'text-[var(--af-ink-soft)] hover:bg-[rgba(0,173,181,0.08)] hover:text-[var(--af-ink)]'
-                        }
-                    `}
+                    className="group w-full"
                 >
-                    <item.icon size={20} className={isActive ? 'text-[var(--af-accent)]' : 'text-[var(--af-ink-muted)]'} />
-                    {!collapsed && (
-                        <Text size="sm" ml="md" fw={500}>
-                            {item.label}
-                        </Text>
-                    )}
+                    <div
+                        className={`
+                            relative w-full flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200
+                            ${isActive
+                                ? 'bg-[rgba(0,173,181,0.16)] text-[var(--af-ink)] shadow-[0_10px_30px_rgba(0,0,0,0.26)] border border-[rgba(0,173,181,0.22)]'
+                                : 'text-[var(--af-ink-soft)] hover:bg-[rgba(0,173,181,0.08)] hover:text-[var(--af-ink)] border border-transparent'}
+                        `}
+                    >
+                        <span
+                            className={`grid h-10 w-10 place-items-center rounded-lg border transition-all duration-200
+                                ${isActive
+                                    ? 'bg-[rgba(0,173,181,0.22)] border-[rgba(0,173,181,0.45)] text-[var(--af-accent)]'
+                                    : 'bg-[rgba(255,255,255,0.02)] border-[var(--af-border)] text-[var(--af-ink-muted)] group-hover:text-[var(--af-accent)]'}
+                            `}
+                        >
+                            <item.icon size={18} />
+                        </span>
+                        {!collapsed && (
+                            <div className="flex-1 flex items-center gap-2">
+                                <Text size="sm" fw={600} className="tracking-tight">
+                                    {item.label}
+                                </Text>
+                                {item.badge && (
+                                    <Badge size="xs" color="fox" variant="light" className="uppercase tracking-wide">
+                                        {item.badge}
+                                    </Badge>
+                                )}
+                            </div>
+                        )}
+                        {isActive && (
+                            <span className="absolute right-2 h-6 w-1.5 rounded-full bg-[var(--af-accent)] shadow-[0_0_10px_rgba(0,173,181,0.7)]" />
+                        )}
+                    </div>
                 </UnstyledButton>
             </Tooltip>
         );
@@ -56,32 +77,32 @@ export const Sidebar = () => {
     return (
         <nav
             className={`
-                h-[calc(100vh-64px)] overflow-y-auto bg-[var(--af-surface-alt)] border-r border-[var(--af-border)] shadow-[10px_0_35px_rgba(0,0,0,0.35)]
+                h-[calc(100vh-64px)] overflow-y-auto bg-[linear-gradient(160deg,rgba(34,40,49,0.98),rgba(57,62,70,0.92))]
+                border-r border-[var(--af-border)] shadow-[10px_0_35px_rgba(0,0,0,0.35)]
                 transition-all duration-300 flex flex-col sticky top-16 text-[var(--af-ink)]
-                ${collapsed ? 'w-20' : 'w-64'}
+                ${collapsed ? 'w-20' : 'w-[17rem]'}
             `}
         >
-            <div className="flex-1 py-6 px-3">
+            <div className="flex-1 py-5 px-3 space-y-4">
                 <Stack gap="xs">
-                    <Text size="xs" fw={700} c="gray.5" className="px-3 mb-2 uppercase tracking-wider">
+                    <Text size="xs" fw={700} c="gray.5" className="px-3 uppercase tracking-[0.2em]">
                         {!collapsed ? 'Menu' : '...'}
                     </Text>
                     {NAV_ITEMS.map((item) => (
                         <NavItem key={item.path} item={item} />
                     ))}
-
-                    {isAdmin && (
-                        <>
-                            <div className="my-4 border-t border-[var(--af-border)]" />
-                            <Text size="xs" fw={700} c="gray.5" className="px-3 mb-2 uppercase tracking-wider">
-                                {!collapsed ? 'Admin' : '...'}
-                            </Text>
-                            {ADMIN_ITEMS.map((item) => (
-                                <NavItem key={item.path} item={item} />
-                            ))}
-                        </>
-                    )}
                 </Stack>
+
+                {isAdmin && (
+                    <Stack gap="xs">
+                        <Text size="xs" fw={700} c="gray.5" className="px-3 uppercase tracking-[0.2em]">
+                            {!collapsed ? 'Admin' : '...'}
+                        </Text>
+                        {ADMIN_ITEMS.map((item) => (
+                            <NavItem key={item.path} item={item} />
+                        ))}
+                    </Stack>
+                )}
             </div>
 
             <div className="p-3 border-t border-[var(--af-border)] bg-[rgba(57,62,70,0.5)]">

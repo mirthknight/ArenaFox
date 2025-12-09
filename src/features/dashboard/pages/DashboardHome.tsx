@@ -1,11 +1,11 @@
 import { SimpleGrid, Paper, Text, Group, Divider, Stack } from '@mantine/core';
-import { ArrowUpRight, Users, Trophy, TrendingUp, ShieldCheck } from 'lucide-react';
+import { ArrowUpRight, Users, Trophy, TrendingUp, ShieldCheck, type Icon } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 
 export const DashboardHome = () => {
     const { user } = useAuth();
 
-    const StatCard = ({ title, value, icon: Icon, trend }: { title: string; value: string; icon: any; trend?: string }) => (
+    const StatCard = ({ title, value, icon: StatIcon, trend }: { title: string; value: string; icon: Icon; trend?: string }) => (
         <Paper className="p-5 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] text-[var(--af-ink)]" radius="md">
             <Group justify="space-between" mb="sm">
                 <div>
@@ -15,7 +15,7 @@ export const DashboardHome = () => {
                     <Text className="text-3xl font-bold text-[var(--af-ink)] mt-1">{value}</Text>
                 </div>
                 <div className="p-2 bg-[rgba(0,173,181,0.12)] text-[var(--af-accent)] rounded-lg border border-[var(--af-border)]">
-                    <Icon size={20} />
+                    <StatIcon size={20} />
                 </div>
             </Group>
             {trend && (
