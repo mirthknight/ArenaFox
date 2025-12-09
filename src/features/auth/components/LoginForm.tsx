@@ -44,17 +44,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
       ),
       styles: {
         root: {
-          backgroundColor: 'rgba(30, 15, 15, 0.95)',
-          border: '1px solid rgba(239, 68, 68, 0.4)',
-          boxShadow: '0 4px 12px rgba(239, 68, 68, 0.15)',
-          backdropFilter: 'blur(8px)',
+          backgroundColor: 'rgba(57, 62, 70, 0.95)',
+          border: '1px solid rgba(244, 63, 94, 0.45)',
+          boxShadow: '0 14px 40px rgba(0, 0, 0, 0.35)',
+          backdropFilter: 'blur(12px)',
         },
         title: {
-          color: '#f87171',
+          color: '#fca5a5',
           fontWeight: 600,
         },
         description: {
-          color: '#fca5a5',
+          color: '#fecdd3',
         },
         icon: {
           color: '#f87171',
@@ -143,18 +143,18 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
       notifications.show({
         title: 'Arena Fox',
         message: 'Logged in. Create and manage your workspaces after you enter.',
-        color: 'teal',
+        color: 'fox',
         icon: <LogIn size={16} />,
       });
     }
   };
 
   return (
-    <Card radius="xl" padding="lg" className="glass-panel">
+    <Card radius="xl" padding="lg" className="glass-panel text-[var(--af-ink)]">
       <Stack gap="md">
         <Group justify="space-between" align="center">
           <div>
-            <Text size="sm" c="gray.3">
+            <Text size="sm" c="gray.4">
               Secure access
             </Text>
             <Title order={3} c="white">
@@ -173,7 +173,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
             leftSection={<ShieldCheck size={16} />}
             radius="md"
             styles={{
-              label: { color: 'var(--mantine-color-gray-4)' },
+              input: { backgroundColor: 'rgba(34,40,49,0.6)', color: 'var(--af-ink)' },
+              label: { color: 'var(--af-ink-soft)' },
             }}
           />
           <TextInput
@@ -185,14 +186,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
             leftSection={<ShieldCheck size={16} />}
             radius="md"
             styles={{
-              label: { color: 'var(--mantine-color-gray-4)' },
+              input: { backgroundColor: 'rgba(34,40,49,0.6)', color: 'var(--af-ink)' },
+              label: { color: 'var(--af-ink-soft)' },
             }}
           />
 
           <Group justify="space-between" align="center" mt="xs">
             <Switch
               size="md"
-              color="teal"
+              color="fox"
               checked={rememberMe}
               onChange={(event) => setRememberMe(event.currentTarget.checked)}
               label={
@@ -200,13 +202,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
                   <Text size="sm" c="white">
                     Remember me
                   </Text>
-                  <Text size="xs" c="gray.3">
+                  <Text size="xs" c="gray.4">
                     Keep this device ready for quick access.
                   </Text>
                 </Stack>
               }
             />
-            <Anchor size="sm" href="#" underline="hover" c="teal.2">
+            <Anchor size="sm" href="#" underline="hover" c="fox.2">
               Forgot password?
             </Anchor>
           </Group>
@@ -217,7 +219,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
             leftSection={<LogIn size={16} />}
             radius="md"
             size="sm"
-            color="teal"
+            color="fox"
             loading={isSubmitting}
             disabled={isSubmitting}
           >
@@ -228,7 +230,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
             variant="outline"
             radius="md"
             size="sm"
-            color="gray"
+            color="fox"
             leftSection={<span className="text-lg">G</span>}
             disabled
           >
@@ -242,7 +244,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting }) 
           <Text size="sm" fw={600} c="white">
             Workspace guidance
           </Text>
-          <Text size="sm" c="gray.2">
+          <Text size="sm" c="gray.4">
             Set up workspaces after you sign in—no extra steps required.
           </Text>
         </Stack>

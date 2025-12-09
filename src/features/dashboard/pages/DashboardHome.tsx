@@ -6,20 +6,20 @@ export const DashboardHome = () => {
     const { user } = useAuth();
 
     const StatCard = ({ title, value, icon: Icon, trend }: { title: string; value: string; icon: any; trend?: string }) => (
-        <Paper className="p-5 bg-white border border-slate-200 shadow-sm" radius="md">
+        <Paper className="p-5 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] text-[var(--af-ink)]" radius="md">
             <Group justify="space-between" mb="sm">
                 <div>
-                    <Text size="xs" c="dimmed" tt="uppercase" fw={700}>
+                    <Text size="xs" c="gray.5" tt="uppercase" fw={700}>
                         {title}
                     </Text>
-                    <Text className="text-3xl font-bold text-slate-900 mt-1">{value}</Text>
+                    <Text className="text-3xl font-bold text-[var(--af-ink)] mt-1">{value}</Text>
                 </div>
-                <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                <div className="p-2 bg-[rgba(0,173,181,0.12)] text-[var(--af-accent)] rounded-lg border border-[var(--af-border)]">
                     <Icon size={20} />
                 </div>
             </Group>
             {trend && (
-                <Group gap="xs" c="teal.6">
+                <Group gap="xs" c="fox.4">
                     <ArrowUpRight size={14} />
                     <Text size="sm" fw={600}>
                         {trend} this week
@@ -32,10 +32,10 @@ export const DashboardHome = () => {
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <Stack gap={4}>
-                <Text className="text-3xl md:text-4xl font-black tracking-tight text-slate-900">
+                <Text className="text-3xl md:text-4xl font-black tracking-tight text-[var(--af-ink)]">
                     Welcome back, {user?.displayName}
                 </Text>
-                <Group gap="sm" c="dimmed">
+                <Group gap="sm" c="gray.4">
                     <ShieldCheck size={16} />
                     <Text size="sm">You are signed in and synced with the dashboard tools.</Text>
                 </Group>
@@ -48,16 +48,16 @@ export const DashboardHome = () => {
                 <StatCard title="Total XP" value="892k" icon={Users} trend="5%" />
             </SimpleGrid>
 
-            <Paper className="p-6 bg-white border border-slate-200 shadow-sm" radius="md">
+            <Paper className="p-6 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] text-[var(--af-ink)]" radius="md">
                 <Stack gap="md">
                     <Group justify="space-between">
                         <Text fw={700}>This week at a glance</Text>
-                        <Text size="sm" c="dimmed">
+                        <Text size="sm" c="gray.5">
                             Clean, Scandinavian-inspired layout for easier scanning.
                         </Text>
                     </Group>
                     <Divider />
-                    <Text size="sm" c="dimmed">
+                    <Text size="sm" c="gray.5">
                         Charts and activity feeds will render here once connected to live data.
                     </Text>
                 </Stack>

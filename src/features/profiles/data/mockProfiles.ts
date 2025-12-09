@@ -26,7 +26,7 @@ export const defaultProfiles: MemberProfile[] = [
         isVerified: true,
         isEnabled: true,
         statusLabel: 'Leading the arena',
-        avatarColor: 'teal',
+        avatarColor: 'fox',
     },
     {
         id: '2',

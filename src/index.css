@@ -2,29 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --af-ink: #eeeeee;
+  --af-ink-muted: #cfd4da;
+  --af-ink-soft: #a8b0b8;
+  --af-surface: #222831;
+  --af-surface-alt: #393e46;
+  --af-accent: #00adb5;
+  --af-accent-strong: #0099a2;
+  --af-glow: rgba(0, 173, 181, 0.18);
+  --af-border: rgba(238, 238, 238, 0.1);
+  --af-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.08), transparent 30%),
-    radial-gradient(circle at 80% 30%, rgba(14, 165, 233, 0.08), transparent 35%),
-    linear-gradient(180deg, #f8fafc 0%, #eef2ff 30%, #f8fafc 100%);
-  color: #0f172a;
+  background: radial-gradient(circle at 20% 20%, rgba(0, 173, 181, 0.12), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(57, 62, 70, 0.4), transparent 32%),
+    radial-gradient(circle at 45% 80%, rgba(0, 173, 181, 0.1), transparent 36%),
+    linear-gradient(140deg, #222831 0%, #1c222a 38%, #222831 100%);
+  color: var(--af-ink);
+  font-feature-settings: 'ss01' on, 'cv02' on;
 }
 
 
 .glass-panel {
-  @apply bg-white/80 backdrop-blur-xl border border-slate-100 shadow-[0_10px_40px_rgba(15,23,42,0.08)];
+  background: linear-gradient(160deg, rgba(57, 62, 70, 0.92), rgba(34, 40, 49, 0.92));
+  border: 1px solid var(--af-border);
+  box-shadow: var(--af-shadow);
+  backdrop-filter: blur(14px);
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-slate-900 to-cyan-600;
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(120deg, #00adb5, #eeeeee);
 }
 
 .button-primary {
-  @apply inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white bg-indigo-600 shadow-[0_12px_30px_rgba(79,70,229,0.25)] transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_18px_45px_rgba(79,70,229,0.3)] focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2;
+  @apply inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white transition duration-200 ease-out;
+  background: linear-gradient(120deg, #0099a2, #00adb5);
+  box-shadow: 0 12px 30px rgba(0, 173, 181, 0.25);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.22);
+}
+
+.button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 45px rgba(0, 173, 181, 0.3);
+}
+
+.button-primary:focus-visible {
+  outline: 2px solid var(--af-accent);
+  outline-offset: 2px;
 }
 
 .button-ghost {
-  @apply inline-flex items-center gap-2 px-3 py-2 text-sm text-slate-600 rounded-lg border border-slate-200 hover:border-slate-300 hover:text-slate-900 transition;
+  @apply inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition;
+  color: var(--af-ink-muted);
+  border: 1px solid var(--af-border);
+  background: rgba(57, 62, 70, 0.5);
+}
+
+.button-ghost:hover {
+  color: var(--af-ink);
+  border-color: rgba(238, 238, 238, 0.2);
+  background: rgba(57, 62, 70, 0.8);
 }
 
 
@@ -33,7 +74,7 @@ body {
 }
 
 input::placeholder {
-  color: rgba(15, 23, 42, 0.5);
+  color: rgba(238, 238, 238, 0.6);
 }
 
 .splash-screen {
@@ -46,10 +87,10 @@ input::placeholder {
   justify-content: center;
   gap: 0.75rem;
   padding: 1.5rem;
-  background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.12), transparent 30%),
-    radial-gradient(circle at 80% 30%, rgba(14, 165, 233, 0.1), transparent 32%),
-    radial-gradient(circle at 40% 80%, rgba(16, 149, 131, 0.14), transparent 36%),
-    #0b1220;
+  background: radial-gradient(circle at 18% 22%, rgba(0, 173, 181, 0.18), transparent 32%),
+    radial-gradient(circle at 82% 20%, rgba(57, 62, 70, 0.6), transparent 38%),
+    radial-gradient(circle at 42% 82%, rgba(0, 173, 181, 0.16), transparent 40%),
+    #222831;
   backdrop-filter: blur(8px);
 }
 
@@ -59,9 +100,9 @@ input::placeholder {
   width: 140px;
   height: 140px;
   border-radius: 9999px;
-  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.3), rgba(6, 95, 70, 0.08));
-  box-shadow: 0 20px 60px rgba(16, 185, 129, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: radial-gradient(circle at 30% 30%, rgba(0, 173, 181, 0.32), rgba(34, 40, 49, 0.8));
+  box-shadow: 0 20px 60px rgba(0, 173, 181, 0.25), inset 0 1px 0 rgba(238, 238, 238, 0.12);
+  border: 1px solid rgba(238, 238, 238, 0.12);
 }
 
 ::-webkit-scrollbar {
@@ -73,6 +114,6 @@ input::placeholder {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(148, 163, 184, 0.4);
+  background-color: rgba(0, 173, 181, 0.4);
   border-radius: 9999px;
 }

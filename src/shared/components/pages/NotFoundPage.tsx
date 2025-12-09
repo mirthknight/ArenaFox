@@ -12,8 +12,8 @@ export const NotFoundPage = () => {
                 <ThemeIconFrame icon={<Ghost size={32} />} className="w-20 h-20" />
 
                 <div>
-                    <Title order={1} className="text-4xl text-white mb-2">404: Page Not Found</Title>
-                    <Text c="dimmed" size="lg" maw={500}>
+                    <Title order={1} className="text-4xl text-[var(--af-ink)] mb-2">404: Page Not Found</Title>
+                    <Text c="gray.5" size="lg" maw={500}>
                         The page you are looking for has vanished into the void. It might have been moved, deleted, or never existed in the first place.
                     </Text>
                 </div>
@@ -21,7 +21,7 @@ export const NotFoundPage = () => {
                 <Button
                     size="lg"
                     variant="light"
-                    color="gray"
+                    color="fox"
                     leftSection={<Home size={18} />}
                     onClick={() => navigate('/')}
                 >
