@@ -1,24 +1,17 @@
-import { useNavigate, Outlet } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { LoadingOverlay } from '@mantine/core';
 
 export const RequireAuth = () => {
     const { user, loading } = useAuth();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!loading && !user) {
-            navigate('/login', { replace: true });
-        }
-    }, [loading, user, navigate]);
+    const location = useLocation();
 
     if (loading) {
         return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
     }
 
     if (!user) {
-        return null; // Will redirect via useEffect
+        return <Navigate to="/login" replace state={{ from: location }} />;
     }
 
     return <Outlet />;
