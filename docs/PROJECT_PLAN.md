@@ -4,6 +4,7 @@ This plan tracks the requirements from the latest user brief and how the repo sa
 
 ## Guiding Principles
 - Keep login and dashboard styling consistent (colors, typography, shell chrome).
+- Maintain responsive, mobile-friendly layouts with properly aligned elements across dashboard pages.
 - Document Supabase-ready SQL schema and key queries alongside any feature work.
 - Structure code so layouts, features, and services stay modular and reusable.
 - Never commit sensitive information (use env placeholders only).

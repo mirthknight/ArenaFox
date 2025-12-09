@@ -44,97 +44,99 @@ export const ProfileDirectory = () => {
                 </Text>
             </div>
 
-            <div className="overflow-auto rounded-lg border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] bg-[var(--af-surface)] text-[var(--af-ink)]">
-                <Table highlightOnHover verticalSpacing="sm">
-                    <Table.Thead>
-                        <Table.Tr>
-                            <Table.Th>Member</Table.Th>
-                            <Table.Th>Email</Table.Th>
-                            <Table.Th>Role</Table.Th>
-                            <Table.Th>Status</Table.Th>
-                            <Table.Th>Likes</Table.Th>
-                            <Table.Th className="text-right">Actions</Table.Th>
-                        </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                        {profiles.map((profile) => (
-                            <Table.Tr key={profile.id}>
-                                <Table.Td>
-                                    <Group gap="sm">
-                                        <Avatar radius="xl" size="sm" color={profile.avatarColor ?? 'gray'}>
-                                            {profile.displayName.charAt(0).toUpperCase()}
-                                        </Avatar>
-                                        <div>
-                                    <Group gap={8} align="center">
-                                        <Text fw={700}>{profile.displayName}</Text>
-                                        {profile.isVerified ? (
-                                            <Tooltip label="Verified">
-                                                <Badge color="fox" variant="light" size="xs" leftSection={<ShieldCheck size={12} />}>
-                                                    Verified
-                                                </Badge>
-                                            </Tooltip>
-                                                ) : (
-                                                    <Badge color="gray" variant="outline" size="xs" leftSection={<ShieldOff size={12} />}>
-                                                        Pending
-                                                    </Badge>
-                                                )}
-                                            </Group>
-                                            <Text size="xs" c="dimmed">
-                                                {profile.bio}
-                                            </Text>
-                                        </div>
-                                    </Group>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Text size="sm">{profile.email}</Text>
-                                    {profile.statusLabel && (
-                                    <Text size="xs" c="gray.5">
-                                        {profile.statusLabel}
-                                    </Text>
-                                )}
-                                </Table.Td>
-                                <Table.Td>
-                                    <Text size="sm" tt="capitalize">
-                                        {profile.role.replace('_', ' ')}
-                                    </Text>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Tooltip label={canModerate ? 'Toggle availability' : 'Only admins can change availability'}>
-                                        <Switch
-                                            size="sm"
-                                            color="fox"
-                                            checked={profile.isEnabled}
-                                            onChange={() => toggleEnabled(profile.id)}
-                                            disabled={!canModerate}
-                                        />
-                                    </Tooltip>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Text fw={600}>{profile.likes}</Text>
-                                </Table.Td>
-                                <Table.Td className="text-right">
-                                    <Group gap="xs" justify="flex-end">
-                                        <Tooltip label="Send message">
-                                            <ActionIcon variant="subtle" color="gray" radius="md">
-                                                <Mail size={16} />
-                                            </ActionIcon>
-                                        </Tooltip>
-                                        <Tooltip label="Give a like">
-                                            <ActionIcon
-                                                variant="light"
-                                                color="fox"
-                                                radius="md"
-                                                onClick={() => toggleLike(profile.id)}
-                                            >
-                                                <Heart size={16} />
-                                            </ActionIcon>
-                                        </Tooltip>
-                                    </Group>
-                                </Table.Td>
+            <div className="rounded-lg border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)] bg-[var(--af-surface)] text-[var(--af-ink)]">
+                <Table.ScrollContainer minWidth={760}>
+                    <Table highlightOnHover verticalSpacing="sm">
+                        <Table.Thead>
+                            <Table.Tr>
+                                <Table.Th>Member</Table.Th>
+                                <Table.Th>Email</Table.Th>
+                                <Table.Th>Role</Table.Th>
+                                <Table.Th>Status</Table.Th>
+                                <Table.Th>Likes</Table.Th>
+                                <Table.Th className="text-right">Actions</Table.Th>
                             </Table.Tr>
-                        ))}
-                    </Table.Tbody>
-                </Table>
+                        </Table.Thead>
+                        <Table.Tbody>
+                            {profiles.map((profile) => (
+                                <Table.Tr key={profile.id}>
+                                    <Table.Td>
+                                        <Group gap="sm">
+                                            <Avatar radius="xl" size="sm" color={profile.avatarColor ?? 'gray'}>
+                                                {profile.displayName.charAt(0).toUpperCase()}
+                                            </Avatar>
+                                            <div>
+                                                <Group gap={8} align="center">
+                                                    <Text fw={700}>{profile.displayName}</Text>
+                                                    {profile.isVerified ? (
+                                                        <Tooltip label="Verified">
+                                                            <Badge color="fox" variant="light" size="xs" leftSection={<ShieldCheck size={12} />}>
+                                                                Verified
+                                                            </Badge>
+                                                        </Tooltip>
+                                                    ) : (
+                                                        <Badge color="gray" variant="outline" size="xs" leftSection={<ShieldOff size={12} />}>
+                                                            Pending
+                                                        </Badge>
+                                                    )}
+                                                </Group>
+                                                <Text size="xs" c="dimmed">
+                                                    {profile.bio}
+                                                </Text>
+                                            </div>
+                                        </Group>
+                                    </Table.Td>
+                                    <Table.Td>
+                                        <Text size="sm">{profile.email}</Text>
+                                        {profile.statusLabel && (
+                                            <Text size="xs" c="gray.5">
+                                                {profile.statusLabel}
+                                            </Text>
+                                        )}
+                                    </Table.Td>
+                                    <Table.Td>
+                                        <Text size="sm" tt="capitalize">
+                                            {profile.role.replace('_', ' ')}
+                                        </Text>
+                                    </Table.Td>
+                                    <Table.Td>
+                                        <Tooltip label={canModerate ? 'Toggle availability' : 'Only admins can change availability'}>
+                                            <Switch
+                                                size="sm"
+                                                color="fox"
+                                                checked={profile.isEnabled}
+                                                onChange={() => toggleEnabled(profile.id)}
+                                                disabled={!canModerate}
+                                            />
+                                        </Tooltip>
+                                    </Table.Td>
+                                    <Table.Td>
+                                        <Text fw={600}>{profile.likes}</Text>
+                                    </Table.Td>
+                                    <Table.Td className="text-right">
+                                        <Group gap="xs" justify="flex-end">
+                                            <Tooltip label="Send message">
+                                                <ActionIcon variant="subtle" color="gray" radius="md">
+                                                    <Mail size={16} />
+                                                </ActionIcon>
+                                            </Tooltip>
+                                            <Tooltip label="Give a like">
+                                                <ActionIcon
+                                                    variant="light"
+                                                    color="fox"
+                                                    radius="md"
+                                                    onClick={() => toggleLike(profile.id)}
+                                                >
+                                                    <Heart size={16} />
+                                                </ActionIcon>
+                                            </Tooltip>
+                                        </Group>
+                                    </Table.Td>
+                                </Table.Tr>
+                            ))}
+                        </Table.Tbody>
+                    </Table>
+                </Table.ScrollContainer>
             </div>
         </div>
     );
