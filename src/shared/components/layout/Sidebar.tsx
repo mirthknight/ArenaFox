@@ -20,7 +20,12 @@ const ADMIN_ITEMS = [
     { label: 'User Management', icon: Users, path: '/admin/users' },
 ];
 
-export const Sidebar = () => {
+interface SidebarProps {
+    isMobileOpen: boolean;
+    onClose: () => void;
+}
+
+export const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
     const { user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
@@ -33,7 +38,10 @@ export const Sidebar = () => {
         return (
             <Tooltip label={item.label} position="right" disabled={!collapsed} withArrow>
                 <UnstyledButton
-                    onClick={() => navigate(item.path)}
+                    onClick={() => {
+                        navigate(item.path);
+                        onClose();
+                    }}
                     className="group w-full"
                 >
                     <div
@@ -77,12 +85,16 @@ export const Sidebar = () => {
     return (
         <nav
             className={`
-                sticky top-16 self-start h-full max-h-[calc(100vh-4rem-3.25rem)]
-                overflow-y-auto bg-[linear-gradient(160deg,rgba(34,40,49,0.98),rgba(57,62,70,0.92))]
+                fixed top-16 bottom-0 left-0 z-40 w-[17rem] flex-shrink-0
+                bg-[linear-gradient(160deg,rgba(34,40,49,0.98),rgba(57,62,70,0.92))]
                 border-r border-[var(--af-border)] shadow-[10px_0_35px_rgba(0,0,0,0.35)]
                 transition-all duration-300 flex flex-col text-[var(--af-ink)]
-                ${collapsed ? 'w-20' : 'w-[17rem]'}
+                ${collapsed ? 'md:w-20' : 'md:w-[17rem]'}
+                ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+                md:sticky md:top-16 md:bottom-auto md:min-h-[calc(100vh-4rem)] md:max-h-[calc(100vh-4rem)]
+                overflow-y-auto
             `}
+            aria-label="Sidebar navigation"
         >
             <div className="flex-1 py-5 px-3 space-y-4">
                 <Stack gap="xs">
@@ -108,10 +120,16 @@ export const Sidebar = () => {
 
             <div className="p-3 border-t border-[var(--af-border)] bg-[rgba(57,62,70,0.5)]">
                 <UnstyledButton
-                    onClick={() => setCollapsed(!collapsed)}
+                    onClick={() => {
+                        if (isMobileOpen) {
+                            onClose();
+                            return;
+                        }
+                        setCollapsed(!collapsed);
+                    }}
                     className="w-full flex justify-center p-2 rounded-lg hover:bg-[rgba(0,173,181,0.12)] text-[var(--af-ink-soft)] hover:text-[var(--af-ink)] transition-colors"
                 >
-                    {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+                    {isMobileOpen ? 'Close' : collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
                 </UnstyledButton>
             </div>
         </nav>

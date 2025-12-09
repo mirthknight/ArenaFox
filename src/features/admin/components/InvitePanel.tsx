@@ -13,14 +13,14 @@ interface InvitePanelProps {
 export const InvitePanel = ({ inviteEmail, inviteRole, onEmailChange, onRoleChange, onSendInvite }: InvitePanelProps) => (
     <Paper className="p-4 bg-[var(--af-surface-alt)] border border-[var(--af-border)] shadow-[0_12px_30px_rgba(0,0,0,0.35)]" radius="md">
         <Stack gap="sm">
-            <Group gap="sm" align="flex-end" wrap="wrap">
+            <Group gap="sm" align="flex-end" wrap="wrap" className="flex-col sm:flex-row">
                 <TextInput
                     label="Invite by email"
                     placeholder="player@arena.gg"
                     value={inviteEmail}
                     onChange={(event) => onEmailChange(event.currentTarget.value)}
                     leftSection={<MailPlus size={16} />}
-                    className="min-w-[240px]"
+                    className="min-w-[240px] w-full sm:w-auto"
                 />
                 <Select
                     label="Role"
@@ -33,7 +33,12 @@ export const InvitePanel = ({ inviteEmail, inviteRole, onEmailChange, onRoleChan
                     onChange={(value) => onRoleChange((value as MemberProfile['role']) ?? 'member')}
                     comboboxProps={{ withinPortal: false }}
                 />
-                <Button onClick={onSendInvite} disabled={!inviteEmail.trim()} leftSection={<MailPlus size={16} />}>
+                <Button
+                    onClick={onSendInvite}
+                    disabled={!inviteEmail.trim()}
+                    leftSection={<MailPlus size={16} />}
+                    className="w-full sm:w-auto"
+                >
                     Send invite
                 </Button>
             </Group>

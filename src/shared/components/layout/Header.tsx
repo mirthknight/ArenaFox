@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { ActionIcon, Avatar, Group, Menu, Text, Tooltip, UnstyledButton } from '@mantine/core';
-import { LogOut, Settings, User as UserIcon, Bell } from 'lucide-react';
+import { LogOut, Settings, User as UserIcon, Bell, Menu as MenuIcon } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { ThemeIconFrame } from '@/shared/components/ui';
 
-export const Header = () => {
+interface HeaderProps {
+    onToggleSidebar: () => void;
+}
+
+export const Header = ({ onToggleSidebar }: HeaderProps) => {
     const { user, signOut } = useAuth();
     const navigate = useNavigate();
 
@@ -15,12 +19,25 @@ export const Header = () => {
 
     return (
         <header className="h-16 border-b border-[var(--af-border)] bg-[rgba(34,40,49,0.9)] backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-50 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
-            <Group gap="xs" className="cursor-pointer">
-                {/* Simplified Logo */}
-                <ThemeIconFrame icon="🦊" />
-                <Text fz="xl" fw={900} className="tracking-tighter hidden sm:block text-[var(--af-ink)]">
-                    ARENA <span className="text-[var(--af-accent)]">FOX</span>
-                </Text>
+            <Group gap="sm">
+                <ActionIcon
+                    variant="subtle"
+                    color="fox"
+                    radius="md"
+                    size="lg"
+                    onClick={onToggleSidebar}
+                    className="md:hidden"
+                    aria-label="Toggle navigation"
+                >
+                    <MenuIcon size={18} />
+                </ActionIcon>
+
+                <Group gap="xs" className="cursor-pointer">
+                    <ThemeIconFrame icon="🦊" />
+                    <Text fz="xl" fw={900} className="tracking-tighter hidden sm:block text-[var(--af-ink)]">
+                        ARENA <span className="text-[var(--af-accent)]">FOX</span>
+                    </Text>
+                </Group>
             </Group>
 
             <Group>
