@@ -20,6 +20,7 @@ This plan tracks the requirements from the latest user brief and how the repo sa
 - SPA-friendly routing guardrails were added (login redirect rules, authenticated 404, static 404.html fallback) to handle deep links like `/login` on a fresh load.
 - Workspaces now have domain models backed by Supabase tables (workspaces, members, invites, players, events, change requests, activity, and comments), a singleton store with summary selectors, and persistence helpers for both Supabase and local storage.
 - Workspace state auto-detects when Supabase is unavailable and loads seeded mock data so the UI stays usable during local development or outages.
+- Workspace creation controls are surfaced on the dashboard home and sidebar, using the workspace store to seed new alliances even when Supabase is offline.
 
 ## Immediate Next Steps
 - Wire the profile directory and admin management views to Supabase tables (accounts, profiles, badges, likes, invites) once backend data is available.

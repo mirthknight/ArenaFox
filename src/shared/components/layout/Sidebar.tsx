@@ -9,6 +9,7 @@ import {
 import { useState, type ElementType } from 'react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { WorkspaceCreateButton } from '@/features/workspaces';
 
 
 const NAV_ITEMS = [
@@ -97,6 +98,13 @@ export const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
             aria-label="Sidebar navigation"
         >
             <div className="flex-1 px-3 pt-4 pb-2 md:pb-3 flex flex-col gap-3">
+                <Stack gap="xs" className="pb-1">
+                    <Text size="xs" fw={700} c="gray.5" className="px-3 uppercase tracking-[0.2em]">
+                        {!collapsed ? 'Workspace' : '...'}
+                    </Text>
+                    <WorkspaceCreateButton triggerVariant="sidebar" compact={collapsed} />
+                </Stack>
+
                 <Stack gap="xs">
                     <Text size="xs" fw={700} c="gray.5" className="px-3 uppercase tracking-[0.2em]">
                         {!collapsed ? 'Menu' : '...'}
