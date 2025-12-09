@@ -447,7 +447,7 @@ const toComment = (row: CommentRow): Comment => ({
 });
 
 const handleSingle = async <TRow, TValue>(
-  promise: Promise<PostgrestSingleResponse<TRow>>,
+  promise: PromiseLike<PostgrestSingleResponse<TRow>>,
   mapper: (row: TRow) => TValue
 ) => {
   const { data, error } = await promise;
@@ -461,7 +461,7 @@ const handleSingle = async <TRow, TValue>(
 };
 
 const handleList = async <TRow, TValue>(
-  promise: Promise<PostgrestResponse<TRow>>,
+  promise: PromiseLike<PostgrestResponse<TRow>>,
   mapper: (row: TRow) => TValue
 ) => {
   const { data, error } = await promise;
@@ -479,7 +479,7 @@ const upsertDefaultEventTypes = async (): Promise<EventType[]> => {
   }
 
   const { data, error } = await supabaseClient
-    .from<EventTypeRow>('event_types')
+    .from('event_types')
     .upsert(
       DEFAULT_EVENT_TYPES.map((evt) => ({
         id: evt.id,
@@ -502,32 +502,35 @@ const upsertDefaultEventTypes = async (): Promise<EventType[]> => {
   return (data ?? []).map(toEventType);
 };
 
-const fetchScopedWorkspaces = async (userId: string) => {
-  if (usingMockRepository) {
-    upsertMockMembershipForUser(userId);
-    const state = ensureMockState();
-    return {
-      workspaces: clone(state.workspaces),
-      workspaceMembers: clone(state.workspaceMembers),
-    };
-  }
+const fetchScopedWorkspaces = async (
+  userId: string
+  ): Promise<{ workspaces: Workspace[]; members: WorkspaceMember[]; workspaceIds: string[] }> => {
+    if (usingMockRepository) {
+      upsertMockMembershipForUser(userId);
+      const state = ensureMockState();
+      return {
+        workspaces: clone(state.workspaces),
+        members: clone(state.workspaceMembers),
+        workspaceIds: clone(state.workspaces.map((workspace) => workspace.id)),
+      };
+    }
 
-  const memberRows = await handleList(
-    supabaseClient.from<WorkspaceMemberRow>('workspace_members').select('*').eq('user_id', userId),
-    toWorkspaceMember
-  );
+    const memberRows = await handleList(
+      supabaseClient.from('workspace_members').select('*').eq('user_id', userId),
+      toWorkspaceMember
+    );
 
   const workspaceIds = memberRows.map((member) => member.workspaceId);
-  const ownedWorkspaces = await handleList(
-    supabaseClient.from<WorkspaceRow>('workspaces').select('*').eq('created_by_user_id', userId),
-    toWorkspace
-  );
+    const ownedWorkspaces = await handleList(
+      supabaseClient.from('workspaces').select('*').eq('created_by_user_id', userId),
+      toWorkspace
+    );
 
   const memberWorkspaces = workspaceIds.length
-    ? await handleList(
-        supabaseClient.from<WorkspaceRow>('workspaces').select('*').in('id', workspaceIds),
-        toWorkspace
-      )
+      ? await handleList(
+          supabaseClient.from('workspaces').select('*').in('id', workspaceIds),
+          toWorkspace
+        )
     : [];
 
   const workspaces = [...ownedWorkspaces];
@@ -542,7 +545,9 @@ const fetchScopedWorkspaces = async (userId: string) => {
   return { workspaces, members: memberRows, workspaceIds: combinedIds };
 };
 
-const fetchCollectionsForWorkspaces = async (workspaceIds: string[]): Promise<HydratedWorkspaceState> => {
+type WorkspaceCollections = Omit<HydratedWorkspaceState, 'workspaces' | 'workspaceMembers'>;
+
+const fetchCollectionsForWorkspaces = async (workspaceIds: string[]): Promise<WorkspaceCollections> => {
   if (usingMockRepository) {
     const state = ensureMockState();
     const targetIds = workspaceIds.length ? workspaceIds : state.workspaces.map((workspace) => workspace.id);
@@ -556,8 +561,6 @@ const fetchCollectionsForWorkspaces = async (workspaceIds: string[]): Promise<Hy
     );
 
     return {
-      workspaces: [],
-      workspaceMembers: [],
       workspaceInvites: filterByWorkspace(state.workspaceInvites),
       players: filterByWorkspace(state.players),
       eventTypes: [...state.eventTypes],
@@ -571,8 +574,6 @@ const fetchCollectionsForWorkspaces = async (workspaceIds: string[]): Promise<Hy
 
   if (!workspaceIds.length) {
     return {
-      workspaces: [],
-      workspaceMembers: [],
       workspaceInvites: [],
       players: [],
       eventTypes: [],
@@ -585,54 +586,55 @@ const fetchCollectionsForWorkspaces = async (workspaceIds: string[]): Promise<Hy
   }
 
   const invites = await handleList(
-    supabaseClient.from<WorkspaceInviteRow>('workspace_invites').select('*').in('workspace_id', workspaceIds),
+    supabaseClient.from('workspace_invites').select('*').in('workspace_id', workspaceIds),
     toWorkspaceInvite
   );
 
   const players = await handleList(
-    supabaseClient.from<PlayerRow>('players').select('*').in('workspace_id', workspaceIds),
+    supabaseClient.from('players').select('*').in('workspace_id', workspaceIds),
     toPlayer
   );
 
   const eventTypes = await handleList(
     supabaseClient
-      .from<EventTypeRow>('event_types')
+      .from('event_types')
       .select('*')
       .or(`workspace_id.is.null,workspace_id.in.(${workspaceIds.join(',')})`),
     toEventType
   );
 
   const eventSessions = await handleList(
-    supabaseClient.from<EventSessionRow>('event_sessions').select('*').in('workspace_id', workspaceIds),
+    supabaseClient.from('event_sessions').select('*').in('workspace_id', workspaceIds),
     toEventSession
   );
 
   const sessionIds = eventSessions.map((session) => session.id);
   const eventParticipations = sessionIds.length
     ? await handleList(
-        supabaseClient.from<EventParticipationRow>('event_participations').select('*').in('event_session_id', sessionIds),
+        supabaseClient
+          .from('event_participations')
+          .select('*')
+          .in('event_session_id', sessionIds),
         toEventParticipation
       )
     : [];
 
   const changeRequests = await handleList(
-    supabaseClient.from<ChangeRequestRow>('change_requests').select('*').in('workspace_id', workspaceIds),
+    supabaseClient.from('change_requests').select('*').in('workspace_id', workspaceIds),
     toChangeRequest
   );
 
   const activityLog = await handleList(
-    supabaseClient.from<ActivityLogRow>('activity_logs').select('*').in('workspace_id', workspaceIds),
+    supabaseClient.from('activity_logs').select('*').in('workspace_id', workspaceIds),
     toActivityLog
   );
 
   const comments = await handleList(
-    supabaseClient.from<CommentRow>('comments').select('*').in('workspace_id', workspaceIds),
+    supabaseClient.from('comments').select('*').in('workspace_id', workspaceIds),
     toComment
   );
 
   return {
-    workspaces: [],
-    workspaceMembers: [],
     workspaceInvites: invites,
     players,
     eventTypes,
@@ -671,7 +673,7 @@ export const workspaceRepository = {
 
     const row = fromWorkspace(workspace);
     return handleSingle(
-      supabaseClient.from<WorkspaceRow>('workspaces').insert(row).select('*').single(),
+      supabaseClient.from('workspaces').insert(row).select('*').single(),
       toWorkspace
     );
   },
@@ -688,7 +690,7 @@ export const workspaceRepository = {
 
     const row = fromWorkspace(workspace);
     return handleSingle(
-      supabaseClient.from<WorkspaceRow>('workspaces').update(row).eq('id', workspace.id).select('*').single(),
+      supabaseClient.from('workspaces').update(row).eq('id', workspace.id).select('*').single(),
       toWorkspace
     );
   },
@@ -702,7 +704,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<WorkspaceMemberRow>('workspace_members')
+        .from('workspace_members')
         .upsert({
           id: member.id,
           workspace_id: member.workspaceId,
@@ -736,7 +738,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<WorkspaceInviteRow>('workspace_invites')
+        .from('workspace_invites')
         .insert({
           id: invite.id,
           workspace_id: invite.workspaceId,
@@ -765,7 +767,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<WorkspaceInviteRow>('workspace_invites')
+        .from('workspace_invites')
         .update({
           status: patch.status,
           expires_at: patch.expiresAt,
@@ -786,7 +788,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<PlayerRow>('players')
+        .from('players')
         .insert({
           id: player.id,
           workspace_id: player.workspaceId,
@@ -816,7 +818,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<PlayerRow>('players')
+        .from('players')
         .update({
           in_game_name: player.inGameName,
           alliance_role: player.allianceRole,
@@ -844,7 +846,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<EventTypeRow>('event_types')
+        .from('event_types')
         .upsert({
           id: eventType.id,
           workspace_id: eventType.workspaceId ?? null,
@@ -870,7 +872,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<EventSessionRow>('event_sessions')
+        .from('event_sessions')
         .insert({
           id: session.id,
           workspace_id: session.workspaceId,
@@ -901,7 +903,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<EventSessionRow>('event_sessions')
+        .from('event_sessions')
         .update({
           name: session.name ?? null,
           start_date_time: session.startDateTime,
@@ -940,7 +942,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<EventParticipationRow>('event_participations')
+        .from('event_participations')
         .insert({
           id: participation.id,
           event_session_id: participation.eventSessionId,
@@ -968,7 +970,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<EventParticipationRow>('event_participations')
+        .from('event_participations')
         .update({
           role: participation.role,
           stats: participation.stats,
@@ -991,7 +993,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<ChangeRequestRow>('change_requests')
+        .from('change_requests')
         .insert({
           id: changeRequest.id,
           workspace_id: changeRequest.workspaceId,
@@ -1022,7 +1024,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<ChangeRequestRow>('change_requests')
+        .from('change_requests')
         .update({
           status: changeRequest.status,
           proposed_changes: changeRequest.proposedChanges,
@@ -1046,7 +1048,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<ActivityLogRow>('activity_logs')
+        .from('activity_logs')
         .insert({
           id: entry.id,
           workspace_id: entry.workspaceId,
@@ -1072,7 +1074,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<CommentRow>('comments')
+        .from('comments')
         .insert({
           id: comment.id,
           workspace_id: comment.workspaceId,
@@ -1099,7 +1101,7 @@ export const workspaceRepository = {
 
     return handleSingle(
       supabaseClient
-        .from<CommentRow>('comments')
+        .from('comments')
         .update({
           body: comment.body,
           updated_at: comment.updatedAt,
