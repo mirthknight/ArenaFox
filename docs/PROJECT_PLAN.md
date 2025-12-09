@@ -18,6 +18,7 @@ This plan tracks the requirements from the latest user brief and how the repo sa
 - Dashboard and admin tools now use a light, Scandinavian-inspired layout with simplified data tables, a mock-data notice bar, dynamic page titles, and modal-driven profile editing.
 - Sidebar styling refreshed with clearer active highlights and admin nav badges, and the admin user management view is broken into reusable components for easier iteration.
 - SPA-friendly routing guardrails were added (login redirect rules, authenticated 404, static 404.html fallback) to handle deep links like `/login` on a fresh load.
+- Workspaces now have domain models backed by Supabase tables (workspaces, members, invites, players, events, change requests, activity, and comments), a singleton store with summary selectors, and persistence helpers for both Supabase and local storage.
 
 ## Immediate Next Steps
 - Wire the profile directory and admin management views to Supabase tables (accounts, profiles, badges, likes, invites) once backend data is available.
